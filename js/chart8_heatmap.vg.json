@@ -1,0 +1,138 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 620,
+  "height": 360,
+  "data": {
+    "url": "data/chart8_state_landuse_heatmap.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "area_thousand_ha": "number",
+        "share_of_agriculture_pct": "number"
+      }
+    }
+  },
+  "encoding": {
+    "y": {
+      "field": "state",
+      "type": "nominal",
+      "title": null,
+      "sort": [
+        "Queensland",
+        "New South Wales",
+        "Victoria",
+        "South Australia",
+        "Western Australia",
+        "Tasmania",
+        "Northern Territory",
+        "Australian Capital Territory"
+      ],
+      "axis": {
+        "labelFontSize": 12,
+        "labelLimit": 180,
+        "ticks": false,
+        "domain": false
+      }
+    },
+    "x": {
+      "field": "activity",
+      "type": "nominal",
+      "title": null,
+      "sort": [
+        "Grazing",
+        "Cropping",
+        "Horticulture",
+        "Intensive agriculture"
+      ],
+      "axis": {
+        "labelFontSize": 12,
+        "labelAngle": 0,
+        "labelLimit": 160,
+        "ticks": false,
+        "domain": false
+      }
+    },
+    "tooltip": [
+      {
+        "field": "state",
+        "title": "State / territory"
+      },
+      {
+        "field": "activity",
+        "title": "Land-use activity"
+      },
+      {
+        "field": "area_thousand_ha",
+        "title": "Area ('000 ha)",
+        "format": ",.0f"
+      },
+      {
+        "field": "share_of_agriculture_pct",
+        "title": "Share of agricultural land (%)",
+        "format": ".1f"
+      }
+    ]
+  },
+  "config": {
+    "background": "white",
+    "font": "DM Sans",
+    "view": {
+      "stroke": null
+    }
+  },
+  "transform": [
+    {
+      "calculate": "format(datum.share_of_agriculture_pct, '.0f') + '%'",
+      "as": "share_label"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rect",
+        "stroke": "white",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "color": {
+          "field": "share_of_agriculture_pct",
+          "type": "quantitative",
+          "title": "Share of agricultural land (%)",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ],
+            "scheme": "yellowgreen"
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 260
+          }
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "align": "center",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "text": {
+          "field": "share_label"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.share_of_agriculture_pct >= 80",
+            "value": "#FFFFFF"
+          },
+          "value": "#242820"
+        }
+      }
+    }
+  ]
+}

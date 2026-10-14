@@ -1,0 +1,64 @@
+season,crop,state,state_code,area_ha,production_t,value_aud
+Winter,Wheat,New South Wales,NSW,3829222,13076622,3660605933
+Winter,Wheat,Victoria,VIC,1565904,4197337,1225546061
+Winter,Wheat,Queensland,QLD,805590,2142973,627855222
+Winter,Wheat,South Australia,SA,1964904,2882114,860328000
+Winter,Wheat,Western Australia,WA,4554965,12430868,3737658482
+Winter,Wheat,Tasmania,TAS,4259,33627,12184830
+Winter,Wheat,Northern Territory,NT,0,0,0
+Winter,Wheat,Australian Capital Territory,ACT,1912,15638,4453563
+Winter,Barley,New South Wales,NSW,1128833,3249806,841991265
+Winter,Barley,Victoria,VIC,880217,2135729,592844370
+Winter,Barley,Queensland,QLD,318942,863626,235432268
+Winter,Barley,South Australia,SA,764988,961332,262294323
+Winter,Barley,Western Australia,WA,1803713,6499110,1733488261
+Winter,Barley,Tasmania,TAS,4079,23803,8186942
+Winter,Oats,New South Wales,NSW,262274,126888,46391785
+Winter,Oats,Victoria,VIC,112796,106590,40687349
+Winter,Oats,Queensland,QLD,99565,1401,528291
+Winter,Oats,South Australia,SA,78526,13125,4843831
+Winter,Oats,Western Australia,WA,471277,902583,340511969
+Winter,Oats,Tasmania,TAS,292,925,348869
+Winter,Canola,New South Wales,NSW,1083656,1888013,1364656608
+Winter,Canola,Victoria,VIC,652088,1440011,1034844199
+Winter,Canola,Queensland,QLD,4342,10302,7173214
+Winter,Canola,South Australia,SA,281666,447415,315005974
+Winter,Canola,Western Australia,WA,1648297,3023078,2138024364
+Winter,Canola,Tasmania,TAS,1134,4470,3506281
+Winter,Chickpeas,New South Wales,NSW,602318,1218639,1012921457
+Winter,Chickpeas,Victoria,VIC,4957,15306,13596194
+Winter,Chickpeas,Queensland,QLD,415952,805814,707355948
+Winter,Chickpeas,South Australia,SA,2960,4846,4345327
+Winter,Chickpeas,Western Australia,WA,611,3319,2807798
+Winter,Faba beans,New South Wales,NSW,159677,316994,147281902
+Winter,Faba beans,Victoria,VIC,158381,214644,125338536
+Winter,Faba beans,Queensland,QLD,6263,10903,4537746
+Winter,Faba beans,South Australia,SA,118894,175698,100874074
+Winter,Faba beans,Western Australia,WA,14281,14643,8079543
+Winter,Field peas,New South Wales,NSW,34773,26571,14471830
+Winter,Field peas,Victoria,VIC,44050,29695,16684872
+Winter,Field peas,Queensland,QLD,449,823,581506
+Winter,Field peas,South Australia,SA,33508,13178,6991056
+Winter,Field peas,Western Australia,WA,40714,46726,23932715
+Winter,Lentils,New South Wales,NSW,34577,23575,19462416
+Winter,Lentils,Victoria,VIC,557802,455106,376485861
+Winter,Lentils,Queensland,QLD,0,0,0
+Winter,Lentils,South Australia,SA,534719,538502,463766923
+Winter,Lentils,Western Australia,WA,14750,12497,10666931
+Winter,Lupins,New South Wales,NSW,99482,114871,60361345
+Winter,Lupins,Victoria,VIC,51129,17859,10094855
+Winter,Lupins,Queensland,QLD,0,0,0
+Winter,Lupins,South Australia,SA,40488,10022,5584821
+Winter,Lupins,Western Australia,WA,523182,533289,221397780
+Summer,Sorghum,New South Wales,NSW,185608,942236,283358150
+Summer,Sorghum,Victoria,VIC,2054,9580,2909282
+Summer,Sorghum,Queensland,QLD,357005,1648962,512654184
+Summer,Sorghum,South Australia,SA,0,0,0
+Summer,Sorghum,Western Australia,WA,558,2722,841645
+Summer,Maize,New South Wales,NSW,41225,300531,102925544
+Summer,Maize,Victoria,VIC,16153,85205,31178029
+Summer,Maize,Queensland,QLD,7740,56050,21993204
+Summer,Maize,Western Australia,WA,1477,10054,3976090
+Summer,Rice,New South Wales,NSW,41144,518474,210500348
+Summer,Rice,Victoria,VIC,74,4486,1821455
+Summer,Rice,Queensland,QLD,4,326,132437

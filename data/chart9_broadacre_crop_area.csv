@@ -1,0 +1,67 @@
+crop,season,state,state_code,abs_region_code,area_ha,longitude,latitude
+Wheat,Winter,New South Wales,NSW,1,3829222,147.0,-32.5
+Wheat,Winter,Victoria,VIC,2,1565904,144.4,-37.2
+Wheat,Winter,Queensland,QLD,3,805590,145.0,-22.5
+Wheat,Winter,South Australia,SA,4,1964904,135.2,-30.2
+Wheat,Winter,Western Australia,WA,5,4554965,121.5,-25.5
+Wheat,Winter,Tasmania,TAS,6,4259,146.5,-42.0
+Wheat,Winter,Northern Territory,NT,7,0,133.2,-19.5
+Wheat,Winter,Australian Capital Territory,ACT,8,1912,149.1,-35.5
+Barley,Winter,New South Wales,NSW,1,1128833,147.0,-32.5
+Barley,Winter,Victoria,VIC,2,880217,144.4,-37.2
+Barley,Winter,Queensland,QLD,3,318942,145.0,-22.5
+Barley,Winter,South Australia,SA,4,764988,135.2,-30.2
+Barley,Winter,Western Australia,WA,5,1803713,121.5,-25.5
+Barley,Winter,Tasmania,TAS,6,4079,146.5,-42.0
+Oats,Winter,New South Wales,NSW,1,262274,147.0,-32.5
+Oats,Winter,Victoria,VIC,2,112796,144.4,-37.2
+Oats,Winter,Queensland,QLD,3,99565,145.0,-22.5
+Oats,Winter,South Australia,SA,4,78526,135.2,-30.2
+Oats,Winter,Western Australia,WA,5,471277,121.5,-25.5
+Oats,Winter,Tasmania,TAS,6,292,146.5,-42.0
+Canola,Winter,New South Wales,NSW,1,1083656,147.0,-32.5
+Canola,Winter,Victoria,VIC,2,652088,144.4,-37.2
+Canola,Winter,Queensland,QLD,3,4342,145.0,-22.5
+Canola,Winter,South Australia,SA,4,281666,135.2,-30.2
+Canola,Winter,Western Australia,WA,5,1648297,121.5,-25.5
+Canola,Winter,Tasmania,TAS,6,1134,146.5,-42.0
+Chickpeas,Winter,New South Wales,NSW,1,602318,147.0,-32.5
+Chickpeas,Winter,Victoria,VIC,2,4957,144.4,-37.2
+Chickpeas,Winter,Queensland,QLD,3,415952,145.0,-22.5
+Chickpeas,Winter,South Australia,SA,4,2960,135.2,-30.2
+Chickpeas,Winter,Western Australia,WA,5,611,121.5,-25.5
+Faba beans,Winter,New South Wales,NSW,1,159677,147.0,-32.5
+Faba beans,Winter,Victoria,VIC,2,158381,144.4,-37.2
+Faba beans,Winter,Queensland,QLD,3,6263,145.0,-22.5
+Faba beans,Winter,South Australia,SA,4,118894,135.2,-30.2
+Faba beans,Winter,Western Australia,WA,5,14281,121.5,-25.5
+Field peas,Winter,New South Wales,NSW,1,34773,147.0,-32.5
+Field peas,Winter,Victoria,VIC,2,44050,144.4,-37.2
+Field peas,Winter,Queensland,QLD,3,449,145.0,-22.5
+Field peas,Winter,South Australia,SA,4,33508,135.2,-30.2
+Field peas,Winter,Western Australia,WA,5,40714,121.5,-25.5
+Lentils,Winter,New South Wales,NSW,1,34577,147.0,-32.5
+Lentils,Winter,Victoria,VIC,2,557802,144.4,-37.2
+Lentils,Winter,Queensland,QLD,3,0,145.0,-22.5
+Lentils,Winter,South Australia,SA,4,534719,135.2,-30.2
+Lentils,Winter,Western Australia,WA,5,14750,121.5,-25.5
+Lupins,Winter,New South Wales,NSW,1,99482,147.0,-32.5
+Lupins,Winter,Victoria,VIC,2,51129,144.4,-37.2
+Lupins,Winter,Queensland,QLD,3,0,145.0,-22.5
+Lupins,Winter,South Australia,SA,4,40488,135.2,-30.2
+Lupins,Winter,Western Australia,WA,5,523182,121.5,-25.5
+Sorghum,Summer,New South Wales,NSW,1,185608,147.0,-32.5
+Sorghum,Summer,Victoria,VIC,2,2054,144.4,-37.2
+Sorghum,Summer,Queensland,QLD,3,357005,145.0,-22.5
+Sorghum,Summer,South Australia,SA,4,0,135.2,-30.2
+Sorghum,Summer,Western Australia,WA,5,558,121.5,-25.5
+Maize,Summer,New South Wales,NSW,1,41225,147.0,-32.5
+Maize,Summer,Victoria,VIC,2,16153,144.4,-37.2
+Maize,Summer,Queensland,QLD,3,7740,145.0,-22.5
+Maize,Summer,Western Australia,WA,5,1477,121.5,-25.5
+Rice,Summer,New South Wales,NSW,1,41144,147.0,-32.5
+Rice,Summer,Victoria,VIC,2,74,144.4,-37.2
+Rice,Summer,Queensland,QLD,3,4,145.0,-22.5
+Cotton,Summer,New South Wales,NSW,1,332888,147.0,-32.5
+Cotton,Summer,Victoria,VIC,2,1763,144.4,-37.2
+Cotton,Summer,Queensland,QLD,3,184680,145.0,-22.5

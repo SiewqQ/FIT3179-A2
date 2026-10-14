@@ -1,0 +1,128 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 430,
+  "params": [
+    {
+      "name": "cropChoice",
+      "value": "Wheat"
+    }
+  ],
+  "data": {
+    "url": "data/chart10_crop_area_value.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.crop == cropChoice"
+    },
+    {
+      "filter": "datum.area_ha >= 10000"
+    }
+  ],
+  "config": {
+    "background": "white",
+    "font": "DM Sans",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12,
+      "titlePadding": 12,
+      "gridColor": "#E8E8E8",
+      "domainColor": "#AAAAAA"
+    }
+  },
+  "mark": {
+    "type": "circle",
+    "size": 130,
+    "opacity": 0.78,
+    "stroke": "white",
+    "strokeWidth": 1
+  },
+  "encoding": {
+    "x": {
+      "field": "area_ha",
+      "type": "quantitative",
+      "title": "Total crop area (ha)",
+      "axis": {
+        "format": "~s",
+        "grid": false
+      }
+    },
+    "y": {
+      "field": "value_aud",
+      "type": "quantitative",
+      "title": "Local crop value (A$ billions)",
+      "axis": {
+        "grid": false,
+        "labelExpr": "datum.value == 0 ? '$0B' : '$' + format(datum.value / 1000000000, '.1~f') + 'B'"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "state",
+        "type": "nominal",
+        "title": "State / territory"
+      },
+      {
+        "field": "crop",
+        "type": "nominal",
+        "title": "Crop"
+      },
+      {
+        "field": "area_ha",
+        "type": "quantitative",
+        "title": "Crop area (ha)",
+        "format": ",.0f"
+      },
+      {
+        "field": "production_t",
+        "type": "quantitative",
+        "title": "Production (t)",
+        "format": ",.0f"
+      },
+      {
+        "field": "value_aud",
+        "type": "quantitative",
+        "title": "Local crop value (A$)",
+        "format": "$,.0f"
+      }
+    ],
+    "color": {
+      "field": "state_code",
+      "type": "nominal",
+      "title": "State / territory",
+      "scale": {
+        "domain": [
+          "NSW",
+          "VIC",
+          "QLD",
+          "SA",
+          "WA",
+          "TAS",
+          "NT",
+          "ACT"
+        ],
+        "range": [
+          "#4E79A7",
+          "#F28E2B",
+          "#59A14F",
+          "#E15759",
+          "#B07AA1",
+          "#76B7B2",
+          "#EDC948",
+          "#FF9DA7"
+        ]
+      },
+      "legend": {
+        "orient": "bottom",
+        "direction": "horizontal",
+        "columns": 4,
+        "labelFontSize": 12,
+        "titleFontSize": 12,
+        "symbolSize": 130
+      }
+    }
+  }
+}

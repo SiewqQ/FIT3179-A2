@@ -1,0 +1,33 @@
+state,activity,area_thousand_ha,share_of_agriculture_pct
+New South Wales,Grazing,47285,77.2
+New South Wales,Cropping,13746,22.5
+New South Wales,Horticulture,146,0.2
+New South Wales,Intensive agriculture,38,0.1
+Victoria,Grazing,6800,53.1
+Victoria,Cropping,5644,44.1
+Victoria,Horticulture,296,2.3
+Victoria,Intensive agriculture,56,0.4
+Queensland,Grazing,133104,97.0
+Queensland,Cropping,3941,2.9
+Queensland,Horticulture,160,0.1
+Queensland,Intensive agriculture,19,0.0
+South Australia,Grazing,45174,89.1
+South Australia,Cropping,5362,10.6
+South Australia,Horticulture,145,0.3
+South Australia,Intensive agriculture,9,0.0
+Western Australia,Grazing,85989,86.2
+Western Australia,Cropping,13669,13.7
+Western Australia,Horticulture,59,0.1
+Western Australia,Intensive agriculture,10,0.0
+Tasmania,Grazing,1506,93.0
+Tasmania,Cropping,101,6.2
+Tasmania,Horticulture,9,0.6
+Tasmania,Intensive agriculture,4,0.2
+Northern Territory,Grazing,56123,99.9
+Northern Territory,Cropping,45,0.1
+Northern Territory,Horticulture,11,0.0
+Northern Territory,Intensive agriculture,2,0.0
+Australian Capital Territory,Grazing,31,100.0
+Australian Capital Territory,Cropping,0,0.0
+Australian Capital Territory,Horticulture,0,0.0
+Australian Capital Territory,Intensive agriculture,0,0.0

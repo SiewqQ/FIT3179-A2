@@ -1,0 +1,227 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Percentage change in horticultural growing area from 2023-24 to 2024-25, centred on zero.",
+  "width": 630,
+  "height": 280,
+  "data": {
+    "url": "data/chart12_horticulture_area_change.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "area_2023_24_ha": "number",
+        "area_2024_25_ha": "number",
+        "change_ha": "number",
+        "change_pct": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "format(datum.change_pct, '+.1f') + '%'",
+      "as": "change_label"
+    },
+    {
+      "calculate": "datum.change_pct < 0 ? 'Contraction' : 'Expansion'",
+      "as": "change_direction"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "change_pct",
+      "type": "quantitative",
+      "title": "Change in growing area (%) · 2023-24 to 2024-25",
+      "scale": {
+        "domain": [
+          -6,
+          6
+        ],
+        "nice": false
+      },
+      "axis": {
+        "values": [
+          -6,
+          -4,
+          -2,
+          0,
+          2,
+          4,
+          6
+        ],
+        "grid": false,
+        "labelExpr": "datum.value == 0 ? '0%' : format(datum.value, '+.0f') + '%'"
+      }
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "change_pct": 0
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#8A9185",
+        "strokeWidth": 1.5
+      }
+    },
+    {
+      "mark": {
+        "type": "bar",
+        "size": 32,
+        "cornerRadiusEnd": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Macadamias",
+            "Avocados",
+            "Bananas"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 10,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "x2": {
+          "datum": 0
+        },
+        "color": {
+          "field": "change_direction",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": ["Expansion", "Contraction"],
+            "range": ["#58734A", "#A45E46"]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "columns": 2,
+            "symbolType": "square"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "crop",
+            "type": "nominal",
+            "title": "Crop"
+          },
+          {
+            "field": "change_pct",
+            "type": "quantitative",
+            "title": "Area change (%)",
+            "format": "+.1f"
+          },
+          {
+            "field": "area_2023_24_ha",
+            "type": "quantitative",
+            "title": "2023-24 growing area (ha)",
+            "format": ",.1f"
+          },
+          {
+            "field": "area_2024_25_ha",
+            "type": "quantitative",
+            "title": "2024-25 growing area (ha)",
+            "format": ",.1f"
+          },
+          {
+            "field": "change_ha",
+            "type": "quantitative",
+            "title": "Area change (ha)",
+            "format": "+,.1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "DM Sans",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "align": {
+          "expr": "datum.change_pct < 0 ? 'right' : 'left'"
+        },
+        "dx": {
+          "expr": "datum.change_pct < 0 ? -8 : 8"
+        },
+        "color": "#333333"
+      },
+      "encoding": {
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Macadamias",
+            "Avocados",
+            "Bananas"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 10,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "text": {
+          "field": "change_label"
+        },
+        "tooltip": [
+          {
+            "field": "crop",
+            "type": "nominal",
+            "title": "Crop"
+          },
+          {
+            "field": "change_pct",
+            "type": "quantitative",
+            "title": "Area change (%)",
+            "format": "+.1f"
+          },
+          {
+            "field": "area_2023_24_ha",
+            "type": "quantitative",
+            "title": "2023-24 growing area (ha)",
+            "format": ",.1f"
+          },
+          {
+            "field": "area_2024_25_ha",
+            "type": "quantitative",
+            "title": "2024-25 growing area (ha)",
+            "format": ",.1f"
+          },
+          {
+            "field": "change_ha",
+            "type": "quantitative",
+            "title": "Area change (ha)",
+            "format": "+,.1f"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "background": "white",
+    "font": "DM Sans",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12,
+      "titlePadding": 12
+    },
+    "legend": {
+      "labelFontSize": 11
+    }
+  }
+}

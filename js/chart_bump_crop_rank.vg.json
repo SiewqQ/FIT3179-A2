@@ -1,0 +1,158 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "description": "National planted-area ranks among six selected broadacre crops, 2022-23 to 2024-25.",
+  "width": 560,
+  "height": 340,
+
+  "data": {
+    "url": "data/chart_bump_crop_rank.csv",
+    "format": {
+      "type": "csv",
+      "parse": { "area_ha": "number", "rank": "number" }
+    }
+  },
+
+  "transform": [
+    {
+      "window": [{ "op": "rank", "as": "rank" }],
+      "sort": [{ "field": "area_ha", "order": "descending" }],
+      "groupby": ["year"]
+    }
+  ],
+
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "sort": ["2022-23", "2023-24", "2024-25"],
+      "scale": { "padding": 0.3 },
+      "axis": {
+        "title": null,
+        "labelAngle": 0,
+        "labelFont": "DM Sans",
+        "labelFontSize": 15,
+        "labelFontWeight": 600,
+        "labelPadding": 12,
+        "domain": false,
+        "ticks": false
+      }
+    },
+
+    "y": {
+      "field": "rank",
+      "type": "quantitative",
+      "scale": {
+        "domain": [1, 6],
+        "reverse": true,
+        "zero": false,
+        "nice": false
+      },
+      "axis": {
+        "title": "Planted-area rank (among six crops)",
+        "values": [1, 2, 3, 4, 5, 6],
+        "labelExpr": "datum.value == 1 ? '1st' : datum.value == 2 ? '2nd' : datum.value == 3 ? '3rd' : datum.value + 'th'",
+        "labelFont": "DM Sans",
+        "labelFontSize": 13,
+        "titleFont": "DM Sans",
+        "titleFontSize": 14,
+        "titlePadding": 15,
+        "grid": true,
+        "gridColor": "#E8EAE5",
+        "gridWidth": 1,
+        "domain": false,
+        "ticks": false
+      }
+    },
+
+    "color": {
+      "field": "crop",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Wheat",
+          "Barley",
+          "Canola",
+          "Chickpeas",
+          "Sorghum",
+          "Cotton"
+        ],
+        "range": [
+          "#58734A",
+          "#C68E6B",
+          "#D3B457",
+          "#8D6C8A",
+          "#7B9AA6",
+          "#A56A4F"
+        ]
+      },
+      "legend": null
+    },
+
+    "tooltip": [
+      {
+        "field": "crop",
+        "type": "nominal",
+        "title": "Crop"
+      },
+      {
+        "field": "year",
+        "type": "ordinal",
+        "title": "Year"
+      },
+      {
+        "field": "rank",
+        "type": "quantitative",
+        "title": "Rank among six crops",
+        "format": ".0f"
+      },
+      {
+        "field": "area_ha",
+        "type": "quantitative",
+        "title": "Planted area (ha)",
+        "format": ",.0f"
+      }
+    ]
+  },
+
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3,
+        "cursor": "pointer"
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 160,
+        "opacity": 1,
+        "stroke": "white",
+        "strokeWidth": 2,
+        "cursor": "pointer"
+      }
+    },
+    {
+      "transform": [{ "filter": "datum.year === '2024-25'" }],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 12,
+        "fontSize": 12,
+        "fontWeight": 600,
+        "cursor": "pointer"
+      },
+      "encoding": { "text": { "field": "crop" } }
+    }
+  ],
+
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "DM Sans",
+    "background": "white"
+  }
+}

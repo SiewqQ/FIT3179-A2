@@ -1,0 +1,114 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+    "height": 320,
+    "autosize": {
+    "type": "fit",
+    "contains": "padding"
+    },
+
+  "data": {
+    "sequence": {
+      "start": 1,
+      "stop": 101,
+      "as": "cell"
+    }
+  },
+
+  "transform": [
+    {
+      "calculate": "(datum.cell - 1) % 10",
+      "as": "column"
+    },
+    {
+      "calculate": "floor((datum.cell - 1) / 10)",
+      "as": "row"
+    },
+    {
+      "calculate": "datum.cell <= 55 ? 'Agricultural-use land' : 'Other land uses'",
+      "as": "land_type"
+    },
+    {
+      "calculate": "datum.land_type == 'Agricultural-use land' ? '54.5%' : '45.5%'",
+      "as": "share"
+    }
+  ],
+
+  "mark": {
+    "type": "square",
+    "size": 600,
+    "stroke": "white",
+    "strokeWidth": 1
+  },
+
+  "encoding": {
+    "x": {
+      "field": "column",
+      "type": "ordinal",
+      "axis": null
+    },
+
+    "y": {
+      "field": "row",
+      "type": "ordinal",
+      "sort": "descending",
+      "axis": null
+    },
+
+    "color": {
+      "field": "land_type",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Agricultural-use land",
+          "Other land uses"
+        ],
+        "range": [
+          "#6E8B4E",
+          "#E5E2DC"
+        ]
+      },
+      "legend": {
+        "title": null,
+        "orient": "bottom"
+      }
+    },
+
+    "tooltip": [
+      {
+        "field": "land_type",
+        "type": "nominal",
+        "title": "Land classification"
+      },
+      {
+        "field": "share",
+        "type": "nominal",
+        "title": "Share"
+      }
+    ]
+  },
+
+  "config": {
+    "background": "white",
+
+    "font": "DM Sans",
+
+    "legend": {
+        "title": null,
+        "orient": "bottom",
+        "labelFont": "DM Sans",
+        "labelFontSize": 15,
+        "symbolSize": 220
+        },
+
+    "axis": {
+        "labelFont": "DM Sans",
+        "titleFont": "DM Sans"
+    },
+
+    "view": {
+        "stroke": null
+    }
+    }
+}

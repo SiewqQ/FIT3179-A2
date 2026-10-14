@@ -1,0 +1,145 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+    "height": 280,
+
+    "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+    },
+
+  "data": {
+    "url": "data/chart3_landuse_bar.csv"
+  },
+
+  "transform": [
+    {
+      "calculate": "datum.area_million_ha >= 1 ? format(datum.area_million_ha, '.1f') + ' M ha' : format(datum.area_million_ha, '.3f') + ' M ha'",
+      "as": "area_label"
+    }
+  ],
+
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3,
+        "height": 34
+      },
+
+      "encoding": {
+        "y": {
+          "field": "activity",
+          "type": "nominal",
+          "sort": "-x",
+          "axis": {
+            "title": null,
+            "labelFontSize": 14,
+            "labelPadding": 10,
+            "labelLimit": 180,
+            "ticks": false,
+            "domain": false
+          }
+        },
+
+        "x": {
+          "field": "area_million_ha",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 400]
+          },
+          "axis": {
+            "title": "Land area (million hectares)",
+            "titleFontSize": 13,
+            "titlePadding": 16,
+            "labelFontSize": 12,
+            "grid": true,
+            "gridColor": "#E6E6E6",
+            "gridOpacity": 0.7,
+            "tickCount": 6,
+            "domain": false,
+            "ticks": false
+            }
+        },
+
+        "color": {
+          "field": "activity",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Grazing",
+              "Cropping",
+              "Horticulture",
+              "Intensive agriculture"
+            ],
+            "range": [
+              "#AAB88A",
+              "#E2C66D",
+              "#C68E6B",
+              "#C28A9D"
+            ]
+          },
+          "legend": null
+        },
+
+        "tooltip": [
+          {
+            "field": "activity",
+            "type": "nominal",
+            "title": "Agricultural activity"
+          },
+          {
+            "field": "area_million_ha",
+            "type": "quantitative",
+            "title": "Area (million ha)",
+            "format": ",.3f"
+          }
+        ]
+      }
+    },
+
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 7,
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "color": "#333333"
+      },
+
+      "encoding": {
+        "y": {
+          "field": "activity",
+          "type": "nominal",
+          "sort": "-x"
+        },
+
+        "x": {
+          "field": "area_million_ha",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 400]
+          }
+        },
+
+        "text": {
+          "field": "area_label"
+        }
+      }
+    }
+  ],
+
+  "config": {
+    "background": "white",
+
+    "view": {
+      "stroke": null
+    },
+
+    "font": "DM Sans"
+  }
+}
