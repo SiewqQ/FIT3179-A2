@@ -1,0 +1,193 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": 700,
+  "height": 520,
+
+  "params": [
+    {
+      "name": "landuse",
+      "value": "Grazing"
+    },
+    {
+      "name": "selectedCellId",
+      "value": null
+    }
+  ],
+
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [-18, -36],
+    "rotate": [-132, 0, 0],
+    "center": [0, -27]
+  },
+
+  "layer": [
+    {
+      "data": {
+        "url": "data/chart7_clum_50km_grid.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+
+      "transform": [
+        {
+          "calculate": "landuse == 'Grazing' ? datum.properties.grazing_pct : landuse == 'Cropping' ? datum.properties.cropping_pct : datum.properties.horticulture_pct",
+          "as": "share_pct"
+        }
+      ],
+
+      "mark": {
+        "type": "geoshape",
+        "cursor": "pointer",
+        "stroke": "white",
+        "strokeWidth": 0.25
+      },
+
+      "encoding": {
+        "shape": {
+          "field": "geometry",
+          "type": "geojson"
+        },
+
+        "color": {
+          "field": "share_pct",
+          "type": "quantitative",
+          "title": "Share of mapped land (%)",
+
+          "scale": {
+            "type": "threshold",
+            "domain": [
+              1,
+              5,
+              20,
+              50,
+              80
+            ],
+
+            "range": [
+              "#F2F2E8",
+              "#DCE8B2",
+              "#BCD37C",
+              "#8DBA5A",
+              "#579445",
+              "#286B38"
+            ]
+          },
+
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal"
+          }
+        },
+
+        "tooltip": [
+          {
+            "field": "share_pct",
+            "type": "quantitative",
+            "title": "Selected land-use share (%)",
+            "format": ".1f"
+          },
+
+          {
+            "field": "properties.grazing_pct",
+            "type": "quantitative",
+            "title": "Grazing (%)",
+            "format": ".1f"
+          },
+
+          {
+            "field": "properties.cropping_pct",
+            "type": "quantitative",
+            "title": "Cropping (%)",
+            "format": ".1f"
+          },
+
+          {
+            "field": "properties.horticulture_pct",
+            "type": "quantitative",
+            "title": "Horticulture (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+
+    {
+      "data": {
+        "url": "data/australia_states.json",
+        "format": {
+          "type": "topojson",
+          "feature": "STE_2021_AUST_GDA2020"
+        }
+      },
+
+      "transform": [
+        {
+          "filter": "datum.properties.STE_CODE21 != 'Z'"
+        }
+      ],
+
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#555555",
+        "strokeWidth": 0.7
+      }
+    },
+
+    {
+      "data": {
+        "url": "data/chart7_clum_50km_grid.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+      "transform": [
+        {
+          "filter": "selectedCellId != null && datum.properties.cell_id == selectedCellId"
+        },
+        {
+          "calculate": "landuse == 'Grazing' ? datum.properties.grazing_pct : landuse == 'Cropping' ? datum.properties.cropping_pct : datum.properties.horticulture_pct",
+          "as": "share_pct"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#242820",
+        "strokeWidth": 2.5,
+        "cursor": "pointer"
+      },
+      "encoding": {
+        "shape": {
+          "field": "geometry",
+          "type": "geojson"
+        },
+        "tooltip": [
+          { "field": "share_pct", "type": "quantitative", "title": "Selected land-use share (%)", "format": ".1f" },
+          { "field": "properties.grazing_pct", "type": "quantitative", "title": "Grazing (%)", "format": ".1f" },
+          { "field": "properties.cropping_pct", "type": "quantitative", "title": "Cropping (%)", "format": ".1f" },
+          { "field": "properties.horticulture_pct", "type": "quantitative", "title": "Horticulture (%)", "format": ".1f" }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "background": "white",
+    "font": "DM Sans",
+
+    "view": {
+      "stroke": null
+    },
+
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}

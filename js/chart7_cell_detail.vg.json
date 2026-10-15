@@ -1,0 +1,71 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 185,
+  "height": { "step": 48 },
+  "data": { "name": "cellLanduse" },
+  "transform": [
+    { "calculate": "format(datum.share, '.1f') + '%'", "as": "share_label" }
+  ],
+  "encoding": {
+    "y": {
+      "field": "landuse",
+      "type": "nominal",
+      "sort": ["Grazing", "Cropping", "Horticulture"],
+      "axis": null
+    }
+  },
+  "layer": [
+    {
+      "mark": { "type": "bar", "size": 10, "yOffset": 7, "cornerRadiusEnd": 2 },
+      "encoding": {
+        "x": {
+          "field": "share",
+          "type": "quantitative",
+          "scale": { "domain": [0, 100], "nice": false },
+          "axis": {
+            "title": null,
+            "values": [0, 50, 100],
+            "labelExpr": "datum.value + '%'",
+            "labelFontSize": 10,
+            "domain": false,
+            "ticks": false,
+            "gridColor": "#e8ebe4"
+          }
+        },
+        "color": {
+          "field": "landuse",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Grazing", "Cropping", "Horticulture"],
+            "range": ["#AAB88A", "#E2C66D", "#C68E6B"]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          { "field": "landuse", "type": "nominal", "title": "Land use" },
+          { "field": "share", "type": "quantitative", "title": "Share of mapped land (%)", "format": ".1f" }
+        ]
+      }
+    },
+    {
+      "mark": { "type": "text", "align": "left", "baseline": "middle", "yOffset": -9, "fontSize": 12 },
+      "encoding": {
+        "x": { "datum": 0, "type": "quantitative" },
+        "text": { "field": "landuse" }
+      }
+    },
+    {
+      "mark": { "type": "text", "align": "right", "baseline": "middle", "yOffset": -9, "fontSize": 12, "fontWeight": 600 },
+      "encoding": {
+        "x": { "datum": 100, "type": "quantitative" },
+        "text": { "field": "share_label" }
+      }
+    }
+  ],
+  "config": {
+    "background": "white",
+    "font": "DM Sans",
+    "text": { "color": "#242820" },
+    "view": { "stroke": null }
+  }
+}

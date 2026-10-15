@@ -1,0 +1,14 @@
+﻿id,parent,category,area_thousand_ha
+agriculture,,Agricultural-use land,
+grazing,agriculture,Grazing,
+cropping,agriculture,Cropping,
+horticulture,agriculture,Horticulture,
+intensive,agriculture,Intensive agriculture,
+grazing_native,grazing,Grazing native vegetation,311498
+grazing_modified,grazing,Grazing modified pastures,63959
+irrigated_pastures,grazing,Irrigated pastures,557
+dryland_cropping,cropping,Dryland cropping,41060
+irrigated_cropping,cropping,Irrigated cropping,1446
+dryland_hort,horticulture,Dryland horticulture,74
+irrigated_hort,horticulture,Irrigated horticulture,752
+intensive_ag,intensive,Intensive horticulture and animal production,139

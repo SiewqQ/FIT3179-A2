@@ -1,0 +1,178 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": 700,
+  "height": 520,
+
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [-18, -36],
+    "rotate": [-132, 0, 0],
+    "center": [0, -27]
+  },
+
+  "layer": [
+    {
+      "data": {
+        "url": "data/australia_states.json",
+        "format": {
+          "type": "topojson",
+          "feature": "STE_2021_AUST_GDA2020"
+        }
+      },
+
+      "transform": [
+        {
+          "filter": "datum.properties.STE_CODE21 != 'Z'"
+        },
+        {
+          "lookup": "properties.STE_NAME21",
+          "from": {
+            "data": {
+              "url": "data/chart6_state_ag_share.csv"
+            },
+            "key": "state",
+            "fields": [
+              "state",
+              "agricultural_area_thousand_ha",
+              "total_area_thousand_ha",
+              "agricultural_share_pct"
+            ]
+          }
+        }
+      ],
+
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 1.2
+      },
+
+      "encoding": {
+        "color": {
+          "field": "agricultural_share_pct",
+          "type": "quantitative",
+          "title": "Agricultural-use land (%)",
+          "scale": {
+            "scheme": "yellowgreen",
+            "domain": [0, 80]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 260
+          }
+        },
+
+        "tooltip": [
+          {
+            "field": "properties.STE_NAME21",
+            "type": "nominal",
+            "title": "State / territory"
+          },
+          {
+            "field": "agricultural_share_pct",
+            "type": "quantitative",
+            "title": "Agricultural-use share (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "agricultural_area_thousand_ha",
+            "type": "quantitative",
+            "title": "Agricultural area ('000 ha)",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+
+    {
+      "data": {
+        "values": [
+          {
+            "state": "Western Australia",
+            "label": "WA",
+            "longitude": 121.5,
+            "latitude": -25.5
+          },
+          {
+            "state": "Northern Territory",
+            "label": "NT",
+            "longitude": 133.2,
+            "latitude": -19.5
+          },
+          {
+            "state": "South Australia",
+            "label": "SA",
+            "longitude": 135.2,
+            "latitude": -30.2
+          },
+          {
+            "state": "Queensland",
+            "label": "QLD",
+            "longitude": 145.0,
+            "latitude": -22.5
+          },
+          {
+            "state": "New South Wales",
+            "label": "NSW",
+            "longitude": 147.0,
+            "latitude": -32.5
+          },
+          {
+            "state": "Victoria",
+            "label": "VIC",
+            "longitude": 144.4,
+            "latitude": -37.2
+          },
+          {
+            "state": "Tasmania",
+            "label": "TAS",
+            "longitude": 146.5,
+            "latitude": -42.0
+          }
+        ]
+      },
+
+      "mark": {
+        "type": "text",
+        "font": "Arial",
+        "fontSize": 13,
+        "fontWeight": "normal",
+        "color": "#222222",
+        "stroke": "black",
+        "strokeWidth": 1
+      },
+
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+
+        "text": {
+          "field": "label"
+        }
+      }
+    }
+  ],
+
+  "config": {
+    "background": "white",
+    "font": "DM Sans",
+
+    "view": {
+      "stroke": null
+    },
+
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}

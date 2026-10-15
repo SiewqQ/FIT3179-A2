@@ -1,0 +1,246 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Six broadacre crops compared using proportional symbols with a shared hectare scale.",
+  "autosize": {
+    "type": "pad",
+    "resize": true
+  },
+  "data": {
+    "url": "data/chart9_broadacre_crop_area.csv"
+  },
+  "transform": [
+    {
+      "filter": {
+        "field": "crop",
+        "oneOf": [
+          "Wheat",
+          "Barley",
+          "Canola",
+          "Chickpeas",
+          "Sorghum",
+          "Cotton"
+        ]
+      }
+    }
+  ],
+  "facet": {
+    "field": "crop",
+    "type": "nominal",
+    "sort": [
+      "Wheat",
+      "Barley",
+      "Canola",
+      "Chickpeas",
+      "Sorghum",
+      "Cotton"
+    ],
+    "header": {
+      "title": null,
+      "labelOrient": "top",
+      "labelFont": "DM Sans",
+      "labelFontSize": 14,
+      "labelFontWeight": 600,
+      "labelColor": "#58734a",
+      "labelPadding": 6
+    }
+  },
+  "columns": 2,
+  "spacing": 12,
+  "spec": {
+    "width": 300,
+    "height": 140,
+    "projection": {
+      "type": "conicEqualArea",
+      "parallels": [
+        -18,
+        -36
+      ],
+      "rotate": [
+        -132,
+        0,
+        0
+      ],
+      "center": [
+        0,
+        -27
+      ]
+    },
+    "layer": [
+      {
+        "data": {
+          "url": "data/australia_states.json",
+          "format": {
+            "type": "topojson",
+            "feature": "STE_2021_AUST_GDA2020"
+          }
+        },
+        "transform": [
+          {
+            "filter": "datum.properties.STE_CODE21 != 'Z'"
+          }
+        ],
+        "mark": {
+          "type": "geoshape",
+          "fill": "#F3F1E8",
+          "stroke": "#FFFFFF",
+          "strokeWidth": 1.2
+        }
+      },
+      {
+        "transform": [
+          {
+            "filter": "datum.area_ha > 0"
+          }
+        ],
+        "mark": {
+          "type": "circle",
+          "color": "#4F7D45",
+          "opacity": 0.78,
+          "stroke": "white",
+          "strokeWidth": 1.2,
+          "cursor": "pointer"
+        },
+        "encoding": {
+          "longitude": {
+            "field": "longitude",
+            "type": "quantitative"
+          },
+          "latitude": {
+            "field": "latitude",
+            "type": "quantitative"
+          },
+          "size": {
+            "field": "area_ha",
+            "type": "quantitative",
+            "condition": {
+              "test": "datum.area_ha < 100000",
+              "value": 36
+            },
+            "title": "Crop area (ha)",
+            "scale": {
+              "domain": [
+                0,
+                5000000
+              ],
+              "range": [
+                0,
+                1800
+              ]
+            },
+            "legend": {
+              "orient": "bottom",
+              "direction": "horizontal",
+              "format": "~s",
+              "labelExpr": "datum.value == 100000 ? '≤100k' : format(datum.value, '~s')",
+              "title": "Crop area (ha)",
+              "values": [
+                100000,
+                500000,
+                1000000,
+                3000000,
+                5000000
+              ],
+              "columns": 5
+            }
+          },
+          "tooltip": [
+            {
+              "field": "state",
+              "type": "nominal",
+              "title": "State / territory"
+            },
+            {
+              "field": "crop",
+              "type": "nominal",
+              "title": "Crop"
+            },
+            {
+              "field": "season",
+              "type": "nominal",
+              "title": "Season"
+            },
+            {
+              "field": "area_ha",
+              "type": "quantitative",
+              "title": "Crop area (ha)",
+              "format": ",.0f"
+            }
+          ]
+        }
+      },
+      {
+        "transform": [
+          {
+            "filter": "datum.area_ha > 0"
+          }
+        ],
+        "mark": {
+          "type": "text",
+          "font": "DM Sans",
+          "fontSize": 10,
+          "fontWeight": 600,
+          "dy": {
+            "expr": "datum.crop === 'Wheat' ? (datum.state_code === 'WA' ? -32 : datum.state_code === 'SA' ? -25 : datum.state_code === 'NSW' ? -30 : datum.state_code === 'ACT' ? 12 : -16) : -16"
+          },
+          "color": "#222222",
+          "cursor": "pointer"
+        },
+        "encoding": {
+          "longitude": {
+            "field": "longitude",
+            "type": "quantitative"
+          },
+          "latitude": {
+            "field": "latitude",
+            "type": "quantitative"
+          },
+          "text": {
+            "field": "state_code"
+          },
+          "tooltip": [
+            {
+              "field": "state",
+              "type": "nominal",
+              "title": "State / territory"
+            },
+            {
+              "field": "crop",
+              "type": "nominal",
+              "title": "Crop"
+            },
+            {
+              "field": "season",
+              "type": "nominal",
+              "title": "Season"
+            },
+            {
+              "field": "area_ha",
+              "type": "quantitative",
+              "title": "Crop area (ha)",
+              "format": ",.0f"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "resolve": {
+    "scale": {
+      "size": "shared"
+    },
+    "legend": {
+      "size": "shared"
+    }
+  },
+  "config": {
+    "background": "white",
+    "font": "DM Sans",
+    "view": {
+      "stroke": null
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}

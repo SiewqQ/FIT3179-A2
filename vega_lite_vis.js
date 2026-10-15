@@ -1,0 +1,511 @@
+// Match related marks across layers while leaving axes and basemaps alone.
+const hoverHighlightGroups = {
+    "#waffle_chart": { fields: ["land_type"], legend: true },
+    "#landuse_bar_chart": { fields: ["activity"] },
+    "#slope_chart": { fields: ["activity"] },
+    "#choropleth_chart": { fields: ["properties.STE_NAME21", "state"], any: true, overlay: true },
+    "#binmap_chart": { fields: ["properties.cell_id"], resetOn: ["landuse"], overlay: true },
+    "#cell_landuse_chart": { fields: ["landuse"] },
+    "#heatmap_chart": { fields: ["state", "activity"] },
+    "#crop_symbol_map": { fields: ["state_code"] },
+    "#crop_bump_chart": { fields: ["crop"], legend: true },
+    "#crop_value_scatter": { fields: ["state_code"], legend: true, resetOn: ["cropChoice"] },
+    "#horticulture_trend_chart": { fields: ["category"], legend: true },
+    "#hort_area_change_chart": { fields: ["crop"] }
+};
+
+function embedWithHover(selector, source, options) {
+    const group = hoverHighlightGroups[selector];
+    const previousPatch = options.patch;
+    const accessors = group.fields.map(function(field) {
+        const parts = field.split(".");
+        return parts.map(function(part, index) {
+            return "datum" + parts.slice(0, index + 1).map(function(key) {
+                return "[" + JSON.stringify(key) + "]";
+            }).join("");
+        }).join(" && ");
+    });
+    const values = accessors.map(function(accessor) { return "(" + accessor + ")"; });
+    const keyExpression = group.any
+        ? values.reduceRight(function(fallback, value) {
+            return "isValid(" + value + ") ? toString(" + value + ") : (" + fallback + ")";
+        }, "null")
+        : "(" + values.map(function(value) { return "isValid(" + value + ")"; }).join(" && ") +
+          ") ? " + values.map(function(value) { return "toString(" + value + ")"; }).join(" + ' | ' + ") + " : null";
+    const faded = "hoverKey != null && (" + keyExpression + ") != null && (" + keyExpression + ") !== hoverKey";
+
+    function addFadeRule(original, replacement) {
+        return [{ test: faded, value: replacement }].concat(Array.isArray(original) ? original : [original]);
+    }
+
+    function patchMarks(marks) {
+        (marks || []).forEach(function(mark) {
+            if (mark.marks) {
+                patchMarks(mark.marks);
+            }
+            if (!/(^marks$|_marks$)/.test(mark.name || "") || mark.type === "group") {
+                return;
+            }
+            const update = mark.encode.update || (mark.encode.update = {});
+            const enter = mark.encode.enter || {};
+            const paint = mark.type === "line" || mark.type === "rule" ? "stroke" : "fill";
+            const originalPaint = update[paint] || enter[paint];
+            // Preserve transparent outlines, including the selected bin-map cell.
+            if (originalPaint && originalPaint.value !== null) {
+                update[paint] = addFadeRule(originalPaint, mark.type === "text" ? "#9DA39A" : "#D1D5CE");
+            }
+            update.opacity = addFadeRule(update.opacity || enter.opacity || { value: 1 }, 0.45);
+        });
+    }
+
+    function patchMapOverlay(spec) {
+        const highlights = [];
+        spec.marks.forEach(function(mark, index) {
+            if (!mark.from || !mark.from.data) {
+                return;
+            }
+            // Keep the persistent bin-cell outline above the hover veil.
+            if (selector === "#binmap_chart" && mark.name === "layer_2_marks") {
+                highlights.push(mark);
+                return;
+            }
+            const name = "hover_focus_" + index;
+            spec.data.push({
+                name: name,
+                source: mark.from.data,
+                transform: [{ type: "filter", expr: "hoverKey != null && (" + keyExpression + ") === hoverKey" }]
+            });
+            const highlight = JSON.parse(JSON.stringify(mark));
+            highlight.name = name + "_marks";
+            highlight.from = { data: name };
+            // Hover and tooltips still come from the original map underneath.
+            highlight.interactive = false;
+            highlights.push(highlight);
+        });
+        spec.marks = spec.marks.filter(function(mark) {
+            return !(selector === "#binmap_chart" && mark.name === "layer_2_marks");
+        });
+        spec.marks.push({
+            name: "hover_map_veil",
+            type: "rect",
+            interactive: false,
+            encode: {
+                update: {
+                    x: { value: 0 }, y: { value: 0 },
+                    width: { signal: "width" }, height: { signal: "height" },
+                    fill: { value: "#E5E7E2" },
+                    opacity: { signal: "hoverKey == null ? 0 : 0.85" }
+                }
+            }
+        });
+        spec.marks.push.apply(spec.marks, highlights);
+    }
+
+    return vegaEmbed(selector, source, Object.assign({}, options, {
+        // SVG retains the thousands of base-map paths between hover updates.
+        renderer: group.overlay ? "svg" : (options.renderer || "canvas"),
+        patch: function(spec) {
+            if (previousPatch) {
+                spec = previousPatch(spec);
+            }
+            spec.signals = spec.signals || [];
+            spec.signals.push({ name: "hoverKey", value: null });
+            if (group.overlay) {
+                patchMapOverlay(spec);
+            } else {
+                patchMarks(spec.marks);
+            }
+            return spec;
+        }
+    })).then(function(result) {
+        const view = result.view;
+        let activeKey = null;
+        let requestedKey = null;
+        let framePending = false;
+        let runPending = false;
+
+        function scheduleHighlight(key) {
+            requestedKey = key;
+            if (framePending) {
+                return;
+            }
+            framePending = true;
+            requestAnimationFrame(function() {
+                framePending = false;
+                if (!runPending && activeKey !== requestedKey) {
+                    activeKey = requestedKey;
+                    runPending = true;
+                    view.signal("hoverKey", activeKey).runAsync().catch(console.error).finally(function() {
+                        runPending = false;
+                        if (activeKey !== requestedKey) {
+                            scheduleHighlight(requestedKey);
+                        }
+                    });
+                }
+            });
+        }
+
+        function getKey(item) {
+            const datum = item && item.datum;
+            if (!datum) {
+                return null;
+            }
+            const fields = group.fields.map(function(field) {
+                return field.split(".").reduce(function(value, key) {
+                    return value == null ? undefined : value[key];
+                }, datum);
+            });
+            if (group.any) {
+                const value = fields.find(function(value) { return value != null; });
+                return value == null ? null : String(value);
+            }
+            if (fields.every(function(value) { return value != null; })) {
+                return fields.map(String).join(" | ");
+            }
+            if (group.legend && item.mark && /legend/.test(item.mark.role || "") && datum.value != null) {
+                return String(datum.value);
+            }
+            return null;
+        }
+
+        view.addEventListener("mousemove", function(event, item) {
+            scheduleHighlight(getKey(item));
+        });
+        view.addEventListener("mouseout", function() {
+            scheduleHighlight(null);
+        });
+        (group.resetOn || []).forEach(function(signal) {
+            view.addSignalListener(signal, function() { scheduleHighlight(null); });
+        });
+        return result;
+    });
+}
+
+embedWithHover(
+    "#waffle_chart",
+    "js/chart1_waffle.vg.json",
+    {
+        actions: true
+    }
+).catch(console.error);
+
+
+vegaEmbed(
+    "#treemap_chart",
+    "js/chart2_treemap.vg.json",
+    {
+        actions: true
+    }
+).catch(console.error);
+
+
+embedWithHover(
+    "#landuse_bar_chart",
+    "js/chart3_landuse_bar.vg.json",
+    {
+        actions: true
+    }
+).catch(console.error);
+
+embedWithHover(
+    "#slope_chart",
+    "js/chart4_slope.vg.json",
+    {
+        actions: true
+    }
+).catch(console.error);
+
+vegaEmbed(
+    "#sankey_chart",
+    "js/chart5_sankey.vg.json",
+    {
+        actions: true
+    }
+).then(function(result) {
+
+    const view = result.view;
+
+
+    const label =
+        document.getElementById("sankey_callout_label");
+
+    const stat =
+        document.getElementById("sankey_big_stat");
+
+    const text =
+        document.getElementById("sankey_callout_text");
+
+
+    function resetCallout() {
+
+        label.textContent =
+            "THE DOMINANT SHIFT";
+
+        stat.textContent =
+            "10.4 M ha";
+
+        text.textContent =
+            "was the net shift from grazing-related land uses towards cropping between 2010-11 and 2020-21.";
+    }
+
+
+    function updateCallout(datum) {
+
+        if (!datum) {
+            resetCallout();
+            return;
+        }
+
+
+        label.textContent =
+            "NET LAND-USE SHIFT";
+
+
+        stat.textContent =
+            Number(datum.area_million_ha).toFixed(2) +
+            " M ha";
+
+
+        text.innerHTML =
+            "was the net shift from <strong>" +
+            datum.source +
+            "</strong> towards <strong>" +
+            datum.target +
+            "</strong> between 2010-11 and 2020-21.";
+    }
+
+
+    view.addSignalListener(
+        "activeDatum",
+        function(name, value) {
+
+            updateCallout(value);
+
+        }
+    );
+
+
+    resetCallout();
+
+}).catch(console.error);
+
+embedWithHover(
+    "#choropleth_chart",
+    "js/chart6_choropleth.vg.json",
+    {
+        actions: true
+    }
+).catch(console.error);
+
+Promise.all([
+    embedWithHover(
+        "#binmap_chart",
+        "js/chart7_binmap.vg.json",
+        { actions: true }
+    ),
+    embedWithHover(
+        "#cell_landuse_chart",
+        "js/chart7_cell_detail.vg.json",
+        { actions: true }
+    )
+]).then(function(results) {
+
+    const view = results[0].view;
+    const detailView = results[1].view;
+    const selector = document.getElementById("landuse_select");
+    const status = document.getElementById("cell_selection_status");
+    const detail = document.getElementById("cell_comparison_detail");
+    const clearButton = document.getElementById("clear_cell_selection");
+
+    view.addEventListener("click", function(event, item) {
+        const properties = item && item.datum && item.datum.properties;
+
+        // Ignore the map background and state boundary layer.
+        if (!properties || !properties.cell_id) {
+            return;
+        }
+
+        const rows = [
+            { landuse: "Grazing", share: properties.grazing_pct },
+            { landuse: "Cropping", share: properties.cropping_pct },
+            { landuse: "Horticulture", share: properties.horticulture_pct }
+        ];
+
+        detailView.change(
+            "cellLanduse",
+            vega.changeset().remove(function() { return true; }).insert(rows)
+        ).runAsync().catch(console.error);
+
+        view.signal("selectedCellId", properties.cell_id).runAsync().catch(console.error);
+        detail.hidden = false;
+        clearButton.disabled = false;
+        status.textContent = "Selected cell " + properties.cell_id + ". Click another cell to compare.";
+    });
+
+    clearButton.addEventListener("click", function() {
+        view.signal("selectedCellId", null).runAsync().catch(console.error);
+        detailView.change(
+            "cellLanduse",
+            vega.changeset().remove(function() { return true; })
+        ).runAsync().catch(console.error);
+        detail.hidden = true;
+        clearButton.disabled = true;
+        status.textContent = "Click a cell to compare land uses.";
+        // Keep keyboard focus on a visible control after hiding the button.
+        selector.focus();
+    });
+
+    selector.addEventListener("change", function() {
+        view.signal("landuse", this.value).runAsync().catch(console.error);
+    });
+
+}).catch(console.error);
+
+embedWithHover(
+    "#heatmap_chart",
+    "js/chart8_heatmap.vg.json",
+    {
+        actions: true,
+        patch: function(spec) {
+            spec.data.push({
+                name: "heatmap_annotation_targets",
+                values: [
+                    { activity: "Horticulture" },
+                    { activity: "Intensive agriculture" }
+                ]
+            });
+            // Reserve space between the category labels and colour legend.
+            spec.legends.forEach(function(legend) { legend.offset = 125; });
+            spec.marks.push(
+                {
+                    name: "heatmapAnnotationLeaders",
+                    type: "rule",
+                    interactive: false,
+                    from: { data: "heatmap_annotation_targets" },
+                    encode: {
+                        update: {
+                            x: { signal: "width * (datum.activity === 'Horticulture' ? 0.60 : 0.70)" },
+                            y: { signal: "height + 60" },
+                            x2: { signal: "scale('x', datum.activity) + bandwidth('x') / 2" },
+                            y2: { signal: "height + 24" },
+                            stroke: { value: "#73776D" },
+                            strokeWidth: { value: 1.2 }
+                        }
+                    }
+                },
+                {
+                    name: "heatmapAnnotationText",
+                    type: "text",
+                    interactive: false,
+                    encode: {
+                        update: {
+                            x: { signal: "width * 0.65" },
+                            y: { signal: "height + 70" },
+                            text: { value: "Intensive agriculture is present in several states,\nbut its share is so small relative to grazing and\ncropping that it rounds to 0%." },
+                            lineBreak: { value: "\n" },
+                            lineHeight: { value: 18 },
+                            font: { value: "DM Sans" },
+                            fontSize: { value: 12 },
+                            align: { value: "center" },
+                            baseline: { value: "top" },
+                            fill: { value: "#464C43" }
+                        }
+                    }
+                }
+            );
+            return spec;
+        }
+    }
+).catch(console.error);
+
+embedWithHover(
+    "#crop_symbol_map",
+    "js/chart9_crop_symbol_map.vg.json",
+    {
+        actions: true,
+        patch: function(spec) {
+            // Reflow the facets without rebuilding the charts or their data.
+            spec.signals.push(
+                { name: "cropColumns", value: 2 },
+                { name: "cropLegendColumns", value: 5 }
+            );
+            spec.layout.columns = { signal: "cropColumns" };
+            spec.legends.forEach(function(legend) {
+                if (legend.size) {
+                    legend.columns = { signal: "cropLegendColumns" };
+                }
+            });
+            return spec;
+        }
+    }
+).then(function(result) {
+
+    const view = result.view;
+    const wrapper = document.querySelector(".crop-map-wrapper");
+    let previousWidth;
+
+    function resizeCropMaps() {
+        const availableWidth = wrapper.clientWidth;
+        if (!availableWidth || availableWidth === previousWidth) {
+            return;
+        }
+        previousWidth = availableWidth;
+        const columns = Math.min(2, Math.max(1, Math.floor((availableWidth + 20) / 300)));
+        const mapWidth = Math.min(600, Math.floor((availableWidth - (columns - 1) * 12 - 20) / columns));
+        view
+            .signal("cropColumns", columns)
+            .signal("cropLegendColumns", columns === 2 ? 5 : 2)
+            .signal("child_width", mapWidth)
+            .signal("child_height", columns === 2 ? 300 : Math.round(mapWidth * 0.77))
+            .runAsync()
+            .catch(console.error);
+    }
+
+    resizeCropMaps();
+    const cropMapObserver = new ResizeObserver(resizeCropMaps);
+    cropMapObserver.observe(wrapper);
+
+}).catch(console.error);
+
+embedWithHover(
+    "#crop_bump_chart",
+    "js/chart_bump_crop_rank.vg.json",
+    { actions: true }
+).catch(console.error);
+
+embedWithHover(
+    "#crop_value_scatter",
+    "js/chart10_crop_area_value.vg.json",
+    {
+        actions: true
+    }
+).then(function(result) {
+
+    const view = result.view;
+    const selector = document.getElementById("scatter_crop_select");
+
+    selector.addEventListener("change", function() {
+
+        view
+            .signal("cropChoice", this.value)
+            .run();
+
+    });
+
+}).catch(console.error);
+
+embedWithHover(
+    "#horticulture_trend_chart",
+    "js/chart11_horticulture_trend.vg.json",
+    {
+        actions: true
+    }
+).catch(console.error);
+
+embedWithHover(
+    "#hort_area_change_chart",
+    "js/chart12_horticulture_area_change.vg.json",
+    {
+        actions: true
+    }
+).catch(console.error);

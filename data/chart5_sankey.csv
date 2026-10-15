@@ -1,0 +1,7 @@
+source,target,area_thousand_ha,area_million_ha
+Grazing,Cropping,10408,10.408
+Other land uses,Grazing,1043,1.043
+Grazing,Horticulture,116,0.116
+Cropping,Horticulture,53,0.053
+Other land uses,Cropping,45,0.045
+Grazing,Intensive agriculture,24,0.024

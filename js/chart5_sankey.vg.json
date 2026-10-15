@@ -1,0 +1,698 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 820,
+  "height": 530,
+  "padding": 5,
+  "autosize": "none",
+  "signals": [
+    {
+      "name": "sourceX",
+      "value": 180
+    },
+    {
+      "name": "targetX",
+      "value": 640
+    },
+    {
+      "name": "nodeWidth",
+      "value": 18
+    },
+    {
+      "name": "nodeGap",
+      "value": 0.5
+    },
+    {
+      "name": "midX",
+      "update": "(sourceX + targetX) / 2"
+    },
+    {
+      "name": "hoverDatum",
+      "value": null,
+      "on": [
+        {
+          "events": "@flowMark:mouseover",
+          "update": "datum"
+        },
+        {
+          "events": "@flowMark:mouseout",
+          "update": "null"
+        }
+      ]
+    },
+    {
+      "name": "selectedDatum",
+      "value": null,
+      "on": [
+        {
+          "events": "@flowMark:click",
+          "update": "selectedDatum && selectedDatum.link_id === datum.link_id ? null : datum"
+        }
+      ]
+    },
+    {
+      "name": "activeDatum",
+      "update": "selectedDatum ? selectedDatum : hoverDatum"
+    }
+  ],
+  "data": [
+    {
+      "name": "links",
+      "url": "data/chart5_sankey.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "area_thousand_ha": "number",
+          "area_million_ha": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "formula",
+          "as": "link_id",
+          "expr": "datum.source + ' -> ' + datum.target"
+        }
+      ]
+    },
+    {
+      "name": "sourceNodes",
+      "source": "links",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": [
+            "source"
+          ],
+          "fields": [
+            "area_million_ha"
+          ],
+          "ops": [
+            "sum"
+          ],
+          "as": [
+            "total"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "order",
+          "expr": "datum.source === 'Other land uses' ? 0 : datum.source === 'Grazing' ? 1 : 2"
+        },
+        {
+          "type": "window",
+          "sort": {
+            "field": "order",
+            "order": "ascending"
+          },
+          "ops": [
+            "row_number"
+          ],
+          "as": [
+            "rank"
+          ]
+        },
+        {
+          "type": "stack",
+          "field": "total",
+          "sort": {
+            "field": "order",
+            "order": "ascending"
+          },
+          "as": [
+            "stack0",
+            "stack1"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "node_y0",
+          "expr": "datum.stack0 + (datum.rank - 1) * nodeGap"
+        },
+        {
+          "type": "formula",
+          "as": "node_y1",
+          "expr": "datum.stack1 + (datum.rank - 1) * nodeGap"
+        }
+      ]
+    },
+    {
+      "name": "targetNodes",
+      "source": "links",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": [
+            "target"
+          ],
+          "fields": [
+            "area_million_ha"
+          ],
+          "ops": [
+            "sum"
+          ],
+          "as": [
+            "total"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "order",
+          "expr": "datum.target === 'Grazing' ? 0 : datum.target === 'Cropping' ? 1 : datum.target === 'Horticulture' ? 2 : 3"
+        },
+        {
+          "type": "window",
+          "sort": {
+            "field": "order",
+            "order": "ascending"
+          },
+          "ops": [
+            "row_number"
+          ],
+          "as": [
+            "rank"
+          ]
+        },
+        {
+          "type": "stack",
+          "field": "total",
+          "sort": {
+            "field": "order",
+            "order": "ascending"
+          },
+          "as": [
+            "stack0",
+            "stack1"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "node_y0",
+          "expr": "datum.stack0 + (datum.rank - 1) * nodeGap"
+        },
+        {
+          "type": "formula",
+          "as": "node_y1",
+          "expr": "datum.stack1 + (datum.rank - 1) * nodeGap"
+        }
+      ]
+    },
+    {
+      "name": "sourceSegments",
+      "source": "links",
+      "transform": [
+        {
+          "type": "formula",
+          "as": "target_order",
+          "expr": "datum.target === 'Grazing' ? 0 : datum.target === 'Cropping' ? 1 : datum.target === 'Horticulture' ? 2 : 3"
+        },
+        {
+          "type": "stack",
+          "groupby": [
+            "source"
+          ],
+          "field": "area_million_ha",
+          "sort": {
+            "field": "target_order",
+            "order": "ascending"
+          },
+          "as": [
+            "seg0",
+            "seg1"
+          ]
+        },
+        {
+          "type": "lookup",
+          "from": "sourceNodes",
+          "key": "source",
+          "fields": [
+            "source"
+          ],
+          "values": [
+            "node_y0"
+          ],
+          "as": [
+            "source_base"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "sy0",
+          "expr": "datum.source_base + datum.seg0"
+        },
+        {
+          "type": "formula",
+          "as": "sy1",
+          "expr": "datum.source_base + datum.seg1"
+        }
+      ]
+    },
+    {
+      "name": "targetSegments",
+      "source": "links",
+      "transform": [
+        {
+          "type": "formula",
+          "as": "source_order",
+          "expr": "datum.source === 'Other land uses' ? 0 : datum.source === 'Grazing' ? 1 : 2"
+        },
+        {
+          "type": "stack",
+          "groupby": [
+            "target"
+          ],
+          "field": "area_million_ha",
+          "sort": {
+            "field": "source_order",
+            "order": "ascending"
+          },
+          "as": [
+            "seg0",
+            "seg1"
+          ]
+        },
+        {
+          "type": "lookup",
+          "from": "targetNodes",
+          "key": "target",
+          "fields": [
+            "target"
+          ],
+          "values": [
+            "node_y0"
+          ],
+          "as": [
+            "target_base"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "ty0",
+          "expr": "datum.target_base + datum.seg0"
+        },
+        {
+          "type": "formula",
+          "as": "ty1",
+          "expr": "datum.target_base + datum.seg1"
+        }
+      ]
+    },
+    {
+      "name": "flows",
+      "source": "sourceSegments",
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "targetSegments",
+          "key": "link_id",
+          "fields": [
+            "link_id"
+          ],
+          "values": [
+            "ty0",
+            "ty1"
+          ],
+          "as": [
+            "ty0",
+            "ty1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dominantFlowAnnotation",
+      "source": "flows",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.source === 'Grazing' && datum.target === 'Cropping'"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": [
+        0,
+        13.3
+      ],
+      "range": [
+        35,
+        395
+      ],
+      "zero": true
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": [
+        "Other land uses",
+        "Grazing",
+        "Cropping",
+        "Horticulture",
+        "Intensive agriculture"
+      ],
+      "range": [
+        "#B8B8B8",
+        "#AAB88A",
+        "#E2C66D",
+        "#C68E6B",
+        "#C28A9D"
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "flowMark",
+      "type": "path",
+      "from": {
+        "data": "flows"
+      },
+      "encode": {
+        "enter": {
+          "path": {
+            "signal": "'M' + sourceX + ',' + scale('y', datum.sy0) + ' C' + midX + ',' + scale('y', datum.sy0) + ' ' + midX + ',' + scale('y', datum.ty0) + ' ' + targetX + ',' + scale('y', datum.ty0) + ' L' + targetX + ',' + scale('y', datum.ty1) + ' C' + midX + ',' + scale('y', datum.ty1) + ' ' + midX + ',' + scale('y', datum.sy1) + ' ' + sourceX + ',' + scale('y', datum.sy1) + ' Z'"
+          },
+          "fill": {
+            "scale": "color",
+            "field": "source"
+          },
+          "cursor": {
+            "value": "pointer"
+          },
+          "tooltip": {
+            "signal": "{'From': datum.source, 'To': datum.target, 'Net shift': format(datum.area_million_ha, '.3f') + ' million ha'}"
+          }
+        },
+        "update": {
+          "fillOpacity": {
+            "signal": "!activeDatum ? 0.55 : datum.link_id === activeDatum.link_id ? 0.9 : 0.10"
+          },
+          "stroke": {
+            "signal": "activeDatum && datum.link_id === activeDatum.link_id ? '#4A4A4A' : 'transparent'"
+          },
+          "strokeWidth": {
+            "signal": "activeDatum && datum.link_id === activeDatum.link_id ? 1 : 0"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "sourceNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "sourceX - nodeWidth"
+          },
+          "x2": {
+            "signal": "sourceX"
+          },
+          "y": {
+            "scale": "y",
+            "field": "node_y0"
+          },
+          "y2": {
+            "scale": "y",
+            "field": "node_y1"
+          },
+          "fill": {
+            "scale": "color",
+            "field": "source"
+          },
+          "stroke": {
+            "value": "#FFFFFF"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "targetNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "targetX"
+          },
+          "x2": {
+            "signal": "targetX + nodeWidth"
+          },
+          "y": {
+            "scale": "y",
+            "field": "node_y0"
+          },
+          "y2": {
+            "scale": "y",
+            "field": "node_y1"
+          },
+          "fill": {
+            "scale": "color",
+            "field": "target"
+          },
+          "stroke": {
+            "value": "#FFFFFF"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "sourceNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "sourceX - nodeWidth - 10"
+          },
+          "y": {
+            "signal": "scale('y', (datum.node_y0 + datum.node_y1) / 2)"
+          },
+          "align": {
+            "value": "right"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "text": {
+            "field": "source"
+          },
+          "font": {
+            "value": "Arial"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#333333"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "targetNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "targetX + nodeWidth + 10"
+          },
+          "y": {
+            "signal": "scale('y', (datum.node_y0 + datum.node_y1) / 2)"
+          },
+          "align": {
+            "value": "left"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "text": {
+            "field": "target"
+          },
+          "font": {
+            "value": "Arial"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#333333"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "sourceX"
+          },
+          "y": {
+            "value": 15
+          },
+          "align": {
+            "value": "right"
+          },
+          "text": {
+            "value": "2010-11 source"
+          },
+          "font": {
+            "value": "Arial"
+          },
+          "fontSize": {
+            "value": 13
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#555555"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "targetX"
+          },
+          "y": {
+            "value": 15
+          },
+          "align": {
+            "value": "left"
+          },
+          "text": {
+            "value": "2020-21 destination"
+          },
+          "font": {
+            "value": "DM Sans"
+          },
+          "fontSize": {
+            "value": 13
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#555555"
+          }
+        }
+      }
+    },
+    {
+      "name": "dominantFlowLeader",
+      "type": "rule",
+      "interactive": false,
+      "from": {
+        "data": "dominantFlowAnnotation"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "value": 300
+          },
+          "y": {
+            "value": 451
+          },
+          "x2": {
+            "signal": "midX"
+          },
+          "y2": {
+            "signal": "scale('y', (datum.sy0 + datum.sy1 + datum.ty0 + datum.ty1) / 4)"
+          },
+          "stroke": {
+            "value": "#73776D"
+          },
+          "strokeWidth": {
+            "value": 1.2
+          }
+        }
+      }
+    },
+    {
+      "name": "dominantFlowAnchor",
+      "type": "symbol",
+      "interactive": false,
+      "from": {
+        "data": "dominantFlowAnnotation"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "midX"
+          },
+          "y": {
+            "signal": "scale('y', (datum.sy0 + datum.sy1 + datum.ty0 + datum.ty1) / 4)"
+          },
+          "size": {
+            "value": 18
+          },
+          "fill": {
+            "value": "#73776D"
+          }
+        }
+      }
+    },
+    {
+      "name": "dominantFlowNote",
+      "type": "text",
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": {
+            "value": 180
+          },
+          "y": {
+            "value": 466
+          },
+          "text": {
+            "value": "The flow from grazing into cropping is the largest,\noccupying most of the diagram and visually\novershadowing the smaller shifts."
+          },
+          "lineBreak": {
+            "value": "\n"
+          },
+          "lineHeight": {
+            "value": 18
+          },
+          "font": {
+            "value": "DM Sans"
+          },
+          "fontSize": {
+            "value": 13
+          },
+          "align": {
+            "value": "left"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "fill": {
+            "value": "#464C43"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": 650,
+  "height": 420,
+
+  "data": {
+    "url": "data/chart11_horticulture_value_trend.csv"
+  },
+
+  "mark": {
+    "type": "line",
+    "point": {
+      "filled": true,
+      "size": 65
+    },
+    "strokeWidth": 2.5
+  },
+
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": null,
+      "sort": [
+        "2020-21",
+        "2021-22",
+        "2022-23",
+        "2023-24",
+        "2024-25"
+      ],
+      "axis": {
+        "labelAngle": 0,
+        "grid": false
+      }
+    },
+
+    "y": {
+      "field": "farm_gate_value_million_aud",
+      "type": "quantitative",
+      "title": "Farm gate value (A$ billions)",
+      "scale": {
+        "zero": true
+      },
+      "axis": {
+        "grid": false,
+        "labelExpr": "'$' + format(datum.value / 1000, '.1~f') + 'B'"
+      }
+    },
+
+    "color": {
+      "field": "category",
+      "type": "nominal",
+      "title": null,
+      "scale": {
+        "domain": [
+          "Fruit (excluding wine grapes)",
+          "Vegetables",
+          "Cut flowers, nurseries and turf",
+          "Nuts",
+          "Wine grapes"
+        ],
+        "range": [
+          "#006D77",
+          "#667D15",
+          "#43378B",
+          "#A66A00",
+          "#8C1D40"
+        ]
+      },
+      "legend": {
+        "orient": "bottom",
+        "columns": 2,
+        "labelLimit": 220
+      }
+    },
+
+    "tooltip": [
+      {
+        "field": "year",
+        "title": "Year"
+      },
+      {
+        "field": "category",
+        "title": "Horticulture group"
+      },
+      {
+        "field": "farm_gate_value_million_aud",
+        "type": "quantitative",
+        "title": "Farm gate value (A$ million)",
+        "format": ",.1f"
+      }
+    ]
+  },
+
+  "config": {
+    "background": "white",
+    "font": "DM Sans",
+
+    "view": {
+      "stroke": null
+    },
+
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12,
+      "titlePadding": 12
+    },
+
+    "legend": {
+      "labelFontSize": 11
+    }
+  }
+}
