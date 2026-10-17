@@ -395,10 +395,10 @@ select:focus {
     width: calc((100% - 32px) / 2);
     max-width: none;
 }
-
+/* 
 .bar-section > .section-heading {
     width: 100%;
-}
+} */
 
 .big-picture-section .section-heading .section-number {
     max-width: none;
