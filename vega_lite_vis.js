@@ -1,3 +1,34 @@
+// Fit the complete drawing, including axes, legends and annotations, to its column.
+function embedChart(selector, source, options) {
+    return vegaEmbed(selector, source, options).then(function(result) {
+        if (selector === "#treemap_chart" || selector === "#sankey_chart") {
+            const container = document.querySelector(selector);
+            let previousWidth;
+            function resizeTreemap() {
+                const availableWidth = Math.floor(container.getBoundingClientRect().width);
+                if (!availableWidth || availableWidth === previousWidth) return;
+                previousWidth = availableWidth;
+                // Reserve the embed action button and the drawing's padding.
+                const minimumWidth = selector === "#sankey_chart" ? 820 : 1;
+                result.view.width(Math.max(minimumWidth, availableWidth - 48)).resize().runAsync().catch(console.error);
+            }
+            resizeTreemap();
+            const resizeObserver = new ResizeObserver(resizeTreemap);
+            resizeObserver.observe(container);
+        }
+        const svg = document.querySelector(selector + " svg.marks");
+        if (svg) {
+            function updateViewBox() {
+                svg.setAttribute("viewBox", "0 0 " + svg.getAttribute("width") + " " + svg.getAttribute("height"));
+            }
+            updateViewBox();
+            const observer = new MutationObserver(updateViewBox);
+            observer.observe(svg, { attributes: true, attributeFilter: ["width", "height"] });
+        }
+        return result;
+    });
+}
+
 // Match related marks across layers while leaving axes and basemaps alone.
 const hoverHighlightGroups = {
     "#waffle_chart": { fields: ["land_type"], legend: true },
@@ -7,11 +38,10 @@ const hoverHighlightGroups = {
     "#binmap_chart": { fields: ["properties.cell_id"], resetOn: ["landuse"], overlay: true },
     "#cell_landuse_chart": { fields: ["landuse"] },
     "#heatmap_chart": { fields: ["state", "activity"] },
-    "#crop_symbol_map": { fields: ["state_code"] },
+    "#crop_symbol_map": { fields: ["state_code"], resetOn: ["cropChoice"] },
     "#crop_bump_chart": { fields: ["crop"], legend: true },
     "#crop_value_scatter": { fields: ["state_code"], legend: true, resetOn: ["cropChoice"] },
-    "#horticulture_trend_chart": { fields: ["category"], legend: true },
-    "#hort_area_change_chart": { fields: ["crop"] }
+    "#horticulture_trend_chart": { fields: ["category"], legend: true }
 };
 
 function embedWithHover(selector, source, options) {
@@ -101,12 +131,25 @@ function embedWithHover(selector, source, options) {
         spec.marks.push.apply(spec.marks, highlights);
     }
 
-    return vegaEmbed(selector, source, Object.assign({}, options, {
+    return embedChart(selector, source, Object.assign({}, options, {
         // SVG retains the thousands of base-map paths between hover updates.
         renderer: group.overlay ? "svg" : (options.renderer || "canvas"),
         patch: function(spec) {
             if (previousPatch) {
                 spec = previousPatch(spec);
+            }
+            if (selector === "#binmap_chart" || selector === "#choropleth_chart" || selector === "#crop_symbol_map") {
+                (spec.projections || []).forEach(function(projection) {
+                    delete projection.size;
+                    projection.extent = { signal: "[[24, 0], [width + 24, height]]" };
+                });
+            }
+            if (selector === "#choropleth_chart" || selector === "#binmap_chart" || selector === "#crop_symbol_map") {
+                (spec.legends || []).forEach(function(legend) {
+                    legend.orient = "none";
+                    legend.legendX = 0;
+                    legend.legendY = { signal: "height * 0.88" };
+                });
             }
             spec.signals = spec.signals || [];
             spec.signals.push({ name: "hoverKey", value: null });
@@ -190,7 +233,7 @@ embedWithHover(
 ).catch(console.error);
 
 
-vegaEmbed(
+embedChart(
     "#treemap_chart",
     "js/chart2_treemap.vg.json",
     {
@@ -215,7 +258,7 @@ embedWithHover(
     }
 ).catch(console.error);
 
-vegaEmbed(
+embedChart(
     "#sankey_chart",
     "js/chart5_sankey.vg.json",
     {
@@ -226,9 +269,6 @@ vegaEmbed(
     const view = result.view;
 
 
-    const label =
-        document.getElementById("sankey_callout_label");
-
     const stat =
         document.getElementById("sankey_big_stat");
 
@@ -237,9 +277,6 @@ vegaEmbed(
 
 
     function resetCallout() {
-
-        label.textContent =
-            "THE DOMINANT SHIFT";
 
         stat.textContent =
             "10.4 M ha";
@@ -256,9 +293,6 @@ vegaEmbed(
             return;
         }
 
-
-        label.textContent =
-            "NET LAND-USE SHIFT";
 
 
         stat.textContent =
@@ -374,8 +408,8 @@ embedWithHover(
                     { activity: "Intensive agriculture" }
                 ]
             });
-            // Reserve space between the category labels and colour legend.
-            spec.legends.forEach(function(legend) { legend.offset = 125; });
+            // Place the legend beside the annotation beneath the category labels.
+            spec.legends.forEach(function(legend) { legend.offset = 55; });
             spec.marks.push(
                 {
                     name: "heatmapAnnotationLeaders",
@@ -421,50 +455,12 @@ embedWithHover(
 embedWithHover(
     "#crop_symbol_map",
     "js/chart9_crop_symbol_map.vg.json",
-    {
-        actions: true,
-        patch: function(spec) {
-            // Reflow the facets without rebuilding the charts or their data.
-            spec.signals.push(
-                { name: "cropColumns", value: 2 },
-                { name: "cropLegendColumns", value: 5 }
-            );
-            spec.layout.columns = { signal: "cropColumns" };
-            spec.legends.forEach(function(legend) {
-                if (legend.size) {
-                    legend.columns = { signal: "cropLegendColumns" };
-                }
-            });
-            return spec;
-        }
-    }
+    { actions: true }
 ).then(function(result) {
-
-    const view = result.view;
-    const wrapper = document.querySelector(".crop-map-wrapper");
-    let previousWidth;
-
-    function resizeCropMaps() {
-        const availableWidth = wrapper.clientWidth;
-        if (!availableWidth || availableWidth === previousWidth) {
-            return;
-        }
-        previousWidth = availableWidth;
-        const columns = Math.min(2, Math.max(1, Math.floor((availableWidth + 20) / 300)));
-        const mapWidth = Math.min(600, Math.floor((availableWidth - (columns - 1) * 12 - 20) / columns));
-        view
-            .signal("cropColumns", columns)
-            .signal("cropLegendColumns", columns === 2 ? 5 : 2)
-            .signal("child_width", mapWidth)
-            .signal("child_height", columns === 2 ? 300 : Math.round(mapWidth * 0.77))
-            .runAsync()
-            .catch(console.error);
-    }
-
-    resizeCropMaps();
-    const cropMapObserver = new ResizeObserver(resizeCropMaps);
-    cropMapObserver.observe(wrapper);
-
+    const selector = document.getElementById("crop_map_select");
+    selector.addEventListener("change", function() {
+        result.view.signal("cropChoice", this.value).runAsync().catch(console.error);
+    });
 }).catch(console.error);
 
 embedWithHover(
@@ -473,26 +469,27 @@ embedWithHover(
     { actions: true }
 ).catch(console.error);
 
-embedWithHover(
-    "#crop_value_scatter",
-    "js/chart10_crop_area_value.vg.json",
-    {
-        actions: true
-    }
-).then(function(result) {
-
-    const view = result.view;
-    const selector = document.getElementById("scatter_crop_select");
-
-    selector.addEventListener("change", function() {
-
-        view
-            .signal("cropChoice", this.value)
-            .run();
-
-    });
-
-}).catch(console.error);
+// Chart 11 temporarily disabled; uncomment this block to restore.
+// embedWithHover(
+//     "#crop_value_scatter",
+//     "js/chart10_crop_area_value.vg.json",
+//     {
+//         actions: true
+//     }
+// ).then(function(result) {
+// 
+//     const view = result.view;
+//     const selector = document.getElementById("scatter_crop_select");
+// 
+//     selector.addEventListener("change", function() {
+// 
+//         view
+//             .signal("cropChoice", this.value)
+//             .run();
+// 
+//     });
+// 
+// }).catch(console.error);
 
 embedWithHover(
     "#horticulture_trend_chart",
@@ -502,10 +499,3 @@ embedWithHover(
     }
 ).catch(console.error);
 
-embedWithHover(
-    "#hort_area_change_chart",
-    "js/chart12_horticulture_area_change.vg.json",
-    {
-        actions: true
-    }
-).catch(console.error);

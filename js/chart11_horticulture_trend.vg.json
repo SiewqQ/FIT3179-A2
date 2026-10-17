@@ -1,7 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "width": 650,
+  "width": "container",
+  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
   "height": 420,
 
   "data": {
@@ -61,16 +62,17 @@
           "Wine grapes"
         ],
         "range": [
-          "#006D77",
-          "#667D15",
-          "#43378B",
-          "#A66A00",
-          "#8C1D40"
+          "#B07AA1",
+          "#76B7B2",
+          "#EDC948",
+          "#F28E2B",
+          "#FF9DA7"
         ]
       },
       "legend": {
         "orient": "bottom",
-        "columns": 2,
+        "direction": "horizontal",
+        "columns": 5,
         "labelLimit": 220
       }
     },

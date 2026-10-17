@@ -2,7 +2,8 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
   "description": "National planted-area ranks among six selected broadacre crops, 2022-23 to 2024-25.",
-  "width": 560,
+  "width": "container",
+  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
   "height": 340,
 
   "data": {

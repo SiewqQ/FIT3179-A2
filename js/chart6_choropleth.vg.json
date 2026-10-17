@@ -1,8 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "width": 700,
-  "height": 520,
+  "width": "container",
+  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
+  "height": 700,
 
   "projection": {
     "type": "conicEqualArea",
@@ -136,12 +137,10 @@
 
       "mark": {
         "type": "text",
-        "font": "Arial",
-        "fontSize": 13,
-        "fontWeight": "normal",
-        "color": "#222222",
-        "stroke": "black",
-        "strokeWidth": 1
+        "font": "DM Sans",
+        "fontSize": 14,
+        "fontWeight": 600,
+        "color": "#222222"
       },
 
       "encoding": {
@@ -156,7 +155,7 @@
         },
 
         "text": {
-          "field": "label"
+          "field": "state"
         }
       }
     }

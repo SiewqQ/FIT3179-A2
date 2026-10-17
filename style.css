@@ -62,6 +62,7 @@ body {
     margin: 0 auto;
 
     padding: 60px 30px 32px;
+    text-align: center;
 }
 
 .page-header h1 {
@@ -79,7 +80,7 @@ body {
 .page-header p {
     max-width: 720px;
 
-    margin: 0;
+    margin: 0 auto;
 
     font-size: 18px;
     line-height: 1.65;
@@ -102,6 +103,26 @@ body {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
+}
+
+/* Scale the entire chart proportionally inside the available chart column. */
+.story-section .vega-embed {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.story-section .vega-embed .chart-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.story-section .vega-embed canvas,
+.story-section .vega-embed svg.marks {
+    display: block;
+    max-width: 100%;
+    height: auto !important; /* Override Vega's inline canvas height. */
 }
 
 .page-credits {
@@ -159,13 +180,14 @@ body {
 .section-number {
     font-family: "DM Sans", Arial, sans-serif;
 
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 700;
+    text-transform: uppercase;
     line-height: 1.3;
 
-    letter-spacing: 1.8px;
+    letter-spacing: 1.6px;
 
-    color: var(--accent);
+    color: #20351B;
 
     margin: 0 0 12px;
 }
@@ -263,11 +285,385 @@ select:focus {
    CHART 1  WAFFLE
    ========================================================= */
 
+.big-picture-section > .section-heading {
+    width: calc((100% - 32px) / 2);
+    max-width: none;
+}
+
+.big-picture-section .section-heading .section-number {
+    max-width: none;
+    margin: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 1.6px;
+    color: #20351B;
+}
+
+.big-picture-section > .waffle-chart-wrapper,
+.hort-area-section > .hort-area-chart-wrapper,
+.horticulture-section > .horticulture-chart-wrapper,
+.scatter-section > .scatter-chart-wrapper,
+.bump-section > .slope-chart-wrapper,
+.crop-symbol-section > .crop-map-wrapper,
+.binmap-section > .map-chart-wrapper,
+.choropleth-section > .map-chart-wrapper,
+.sankey-section > .sankey-chart-wrapper,
+.slope-section > .slope-chart-wrapper,
+.bar-section > .bar-chart-wrapper,
+.treemap-section > .treemap-left,
+.heatmap-section > .heatmap-chart-wrapper {
+    width: 100%;
+    margin-bottom: 32px;
+}
+
+.big-picture-section .waffle-big-stat,
+.big-picture-section .treemap-headline,
+.big-picture-section .bar-big-stat,
+.big-picture-section .sankey-big-stat,
+.slope-finding .change-item strong {
+    font-family: "Libre Baskerville", Georgia, serif;
+}
+
+.big-picture-copy {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    align-items: start;
+}
+
+.heatmap-finding {
+    min-width: 0;
+}
+
+.bar-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.hort-area-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.hort-area-finding-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.hort-area-finding {
+    min-width: 0;
+}
+
+.hort-area-section .hort-area-detail-note {
+    margin-top: 18px;
+}
+
+.hort-area-finding > .hort-area-stat:first-child,
+.hort-area-section .big-picture-introduction > p:first-child {
+    margin-top: 0;
+}
+
+.horticulture-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.horticulture-finding-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.horticulture-finding {
+    min-width: 0;
+}
+
+.horticulture-section .horticulture-detail-note {
+    margin-top: 18px;
+}
+
+.scatter-controls {
+    min-width: 0;
+}
+
+.scatter-controls > p:not(.callout-label) {
+    margin: 0;
+    color: var(--body-text);
+}
+
+.scatter-section .big-picture-introduction > .callout-label {
+    color: var(--accent);
+}
+
+.scatter-section .scatter-reading-note {
+    margin-top: 18px;
+}
+
+.bump-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.bump-finding-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.bump-finding {
+    min-width: 0;
+}
+
+.bump-section .bump-detail-note {
+    margin-top: 18px;
+}
+
+.choropleth-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.binmap-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.crop-symbol-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.crop-symbol-controls-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.crop-symbol-controls {
+    min-width: 0;
+}
+
+.crop-symbol-controls > .crop-selector {
+    margin-top: 0;
+}
+
+.crop-symbol-section .crop-pattern-note {
+    margin-top: 18px;
+}
+
+.binmap-controls-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.binmap-controls {
+    min-width: 0;
+}
+
+.binmap-controls > .map-selector {
+    margin-top: 0;
+}
+
+.binmap-section .binmap-cell-note {
+    margin-top: 18px;
+}
+
+.choropleth-finding-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.choropleth-finding {
+    min-width: 0;
+}
+
+.choropleth-finding .callout-note {
+    color: var(--body-text);
+}
+
+.choropleth-finding > .state-stat:first-child {
+    margin-top: 0;
+}
+
+.slope-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.sankey-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.sankey-finding {
+    min-width: 0;
+}
+
+.sankey-section .big-picture-copy > .sankey-big-stat {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.slope-finding-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.slope-finding {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.slope-finding > .change-item {
+    min-width: 0;
+    margin: 0;
+}
+
+.slope-finding .change-item strong {
+    font-size: 23px;
+    line-height: 1.15;
+}
+
+.slope-finding .change-item span {
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.slope-finding .change-item small {
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+@media (max-width: 400px) {
+    .slope-finding {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 12px;
+    }
+}
+
+.bar-finding-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.bar-finding {
+    min-width: 0;
+}
+
+.bar-finding .bar-big-stat {
+    margin-top: 0;
+}
+
+.heatmap-section .big-picture-copy {
+    row-gap: 14px;
+}
+
+.treemap-section .big-picture-copy {
+    row-gap: 18px;
+}
+
+.treemap-finding-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.treemap-headline {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-family: "Lora", Georgia, serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.treemap-finding > p {
+    margin: 0;
+    color: var(--body-text);
+}
+
+.big-picture-introduction .treemap-explanation {
+    margin-top: 18px;
+}
+
+.heatmap-finding-label {
+    margin: 0;
+}
+
+.heatmap-finding .heatmap-big-stat {
+    margin-top: 0;
+}
+
+@media (min-width: 601px) {
+    .treemap-headline {
+        max-width: calc((100% - 32px) / 2);
+    }
+
+    .heatmap-finding-label {
+        grid-column: 1 / -1;
+    }
+}
+
+.heatmap-finding > .callout-label {
+    margin-top: 0;
+}
+
+.big-picture-finding p,
+.big-picture-introduction p {
+    margin: 0;
+    color: var(--body-text);
+}
+
+.big-picture-introduction {
+    padding-left: 24px;
+    border-left: 2px solid var(--border);
+}
+
+.big-picture-finding .waffle-big-stat {
+    margin-top: 0;
+}
+
+.waffle-finding-label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.big-picture-section > .waffle-chart-wrapper {
+    margin-bottom: 18px;
+}
+
+.big-picture-section:has(> .waffle-chart-wrapper) > .big-picture-copy {
+    row-gap: 14px;
+}
+
+.big-picture-finding .waffle-callout-text {
+    font-weight: 400;
+}
+
+.big-picture-copy > .waffle-callout {
+    width: auto;
+    min-width: 0;
+}
+
+@media (max-width: 600px) {
+    .big-picture-section > .section-heading {
+        width: 100%;
+    }
+
+    .treemap-section .treemap-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .big-picture-copy {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .big-picture-introduction {
+        padding-left: 0;
+        padding-top: 24px;
+        border-left: none;
+        border-top: 2px solid var(--border);
+    }
+}
+
 .waffle-row {
     display: flex;
     align-items: center;
 
-    gap: 25px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -284,10 +680,10 @@ select:focus {
 }
 
 .waffle-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -301,7 +697,7 @@ select:focus {
 
     font-family: "Lora", Georgia, serif;
 
-    font-size: 58px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 1;
 
@@ -327,7 +723,7 @@ select:focus {
 .treemap-row {
     display: flex;
     align-items: flex-start;
-    gap: 25px;
+    gap: 5px;
     width: 100%;
 }
 
@@ -354,8 +750,8 @@ select:focus {
 
     gap: 18px;
 
-    margin-top: 18px;
-    padding-top: 18px;
+    margin-top: 8px;
+    padding-top: 8px;
 
 }
 
@@ -436,10 +832,10 @@ select:focus {
 /* RIGHT CALLOUT */
 
 .treemap-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -469,7 +865,7 @@ select:focus {
     display: flex;
     align-items: flex-start;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -486,10 +882,10 @@ select:focus {
 }
 
 .bar-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -503,7 +899,7 @@ select:focus {
 
     font-family: "Lora", Georgia, serif;
 
-    font-size: 52px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 1;
 
@@ -526,7 +922,7 @@ select:focus {
     display: flex;
     align-items: flex-start;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -543,10 +939,10 @@ select:focus {
 }
 
 .slope-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -599,7 +995,7 @@ select:focus {
     display: flex;
     align-items: flex-start;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -616,10 +1012,10 @@ select:focus {
 }
 
 .sankey-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -633,7 +1029,7 @@ select:focus {
 
     font-family: "Lora", Georgia, serif;
 
-    font-size: 42px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 1;
 
@@ -653,10 +1049,10 @@ select:focus {
     font-family: "DM Sans", Arial, sans-serif;
 
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 400;
     line-height: 1.5;
 
-    color: var(--accent);
+    color: var(--muted);
 }
 /* =========================================================
    CHART 6 + 7  MAP LAYOUT
@@ -666,7 +1062,7 @@ select:focus {
     display: flex;
     align-items: center;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -684,10 +1080,10 @@ select:focus {
 }
 
 .map-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -802,7 +1198,7 @@ select:focus {
     display: flex;
     align-items: center;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -819,10 +1215,10 @@ select:focus {
 }
 
 .heatmap-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -836,7 +1232,7 @@ select:focus {
 
     font-family: "Lora", Georgia, serif;
 
-    font-size: 34px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 1.1;
 }
@@ -865,7 +1261,7 @@ select:focus {
     display: flex;
     align-items: center;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -884,10 +1280,10 @@ select:focus {
 }
 
 .crop-map-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -926,7 +1322,7 @@ select:focus {
     display: flex;
     align-items: center;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -943,10 +1339,10 @@ select:focus {
 }
 
 .scatter-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -985,7 +1381,7 @@ select:focus {
     display: flex;
     align-items: center;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -1002,10 +1398,10 @@ select:focus {
 }
 
 .horticulture-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -1042,7 +1438,7 @@ select:focus {
     display: flex;
     align-items: center;
 
-    gap: 35px;
+    gap: 5px;
 
     width: 100%;
 }
@@ -1059,10 +1455,10 @@ select:focus {
 }
 
 .hort-area-callout {
-    flex: 0 0 230px;
+    flex: 0 0 350px;
 
-    width: 230px;
-    min-width: 230px;
+    width: 350px;
+    min-width: 350px;
 
     padding-left: 24px;
 
@@ -1095,7 +1491,7 @@ select:focus {
    7. RESPONSIVE LAYOUT
    ========================================================= */
 
-/* Desktop sightlines: heading in columns 2–3; chart in 1–3; callout in 4. */
+/* Desktop sightlines: heading in columns 2-3; chart in 1-3; callout in 4. */
 /* @media (min-width: 901px) {
     section.story-section {
         display: grid;
@@ -1191,6 +1587,7 @@ select:focus {
 
     /* ALL CHART WRAPPERS */
 
+    .treemap-left,
     .waffle-chart-wrapper,
     .treemap-chart-wrapper,
     .bar-chart-wrapper,
@@ -1274,14 +1671,14 @@ select:focus {
     }
 
     .waffle-big-stat {
-        font-size: 50px;
+        font-size: 22px;
     }
 
     .bar-big-stat {
-        font-size: 46px;
+        font-size: 22px;
     }
 
     .sankey-big-stat {
-        font-size: 38px;
+        font-size: 22px;
     }
 }

@@ -1,6 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 650,
+  "width": "container",
+  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
   "height": 430,
   "params": [
     {
@@ -118,7 +119,7 @@
       "legend": {
         "orient": "bottom",
         "direction": "horizontal",
-        "columns": 4,
+        "columns": 8,
         "labelFontSize": 12,
         "titleFontSize": 12,
         "symbolSize": 130

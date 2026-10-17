@@ -65,13 +65,14 @@
           "Other land uses"
         ],
         "range": [
-          "#6E8B4E",
+          "#477DA5",
           "#E5E2DC"
         ]
       },
       "legend": {
         "title": null,
-        "orient": "bottom"
+        "orient": "bottom",
+        "direction": "horizontal"
       }
     },
 

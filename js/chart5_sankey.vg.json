@@ -1,17 +1,17 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "width": 820,
-  "height": 530,
+  "width": 990,
+  "height": 420,
   "padding": 5,
   "autosize": "none",
   "signals": [
     {
       "name": "sourceX",
-      "value": 180
+      "update": "width * 0.16"
     },
     {
       "name": "targetX",
-      "value": 640
+      "update": "width * 0.63"
     },
     {
       "name": "nodeWidth",
@@ -369,7 +369,7 @@
         "data": "flows"
       },
       "encode": {
-        "enter": {
+        "update": {
           "path": {
             "signal": "'M' + sourceX + ',' + scale('y', datum.sy0) + ' C' + midX + ',' + scale('y', datum.sy0) + ' ' + midX + ',' + scale('y', datum.ty0) + ' ' + targetX + ',' + scale('y', datum.ty0) + ' L' + targetX + ',' + scale('y', datum.ty1) + ' C' + midX + ',' + scale('y', datum.ty1) + ' ' + midX + ',' + scale('y', datum.sy1) + ' ' + sourceX + ',' + scale('y', datum.sy1) + ' Z'"
           },
@@ -382,9 +382,7 @@
           },
           "tooltip": {
             "signal": "{'From': datum.source, 'To': datum.target, 'Net shift': format(datum.area_million_ha, '.3f') + ' million ha'}"
-          }
-        },
-        "update": {
+          },
           "fillOpacity": {
             "signal": "!activeDatum ? 0.55 : datum.link_id === activeDatum.link_id ? 0.9 : 0.10"
           },
@@ -403,7 +401,7 @@
         "data": "sourceNodes"
       },
       "encode": {
-        "enter": {
+        "update": {
           "x": {
             "signal": "sourceX - nodeWidth"
           },
@@ -437,7 +435,7 @@
         "data": "targetNodes"
       },
       "encode": {
-        "enter": {
+        "update": {
           "x": {
             "signal": "targetX"
           },
@@ -471,7 +469,7 @@
         "data": "sourceNodes"
       },
       "encode": {
-        "enter": {
+        "update": {
           "x": {
             "signal": "sourceX - nodeWidth - 10"
           },
@@ -508,7 +506,7 @@
         "data": "targetNodes"
       },
       "encode": {
-        "enter": {
+        "update": {
           "x": {
             "signal": "targetX + nodeWidth + 10"
           },
@@ -542,7 +540,7 @@
     {
       "type": "text",
       "encode": {
-        "enter": {
+        "update": {
           "x": {
             "signal": "sourceX"
           },
@@ -573,7 +571,7 @@
     {
       "type": "text",
       "encode": {
-        "enter": {
+        "update": {
           "x": {
             "signal": "targetX"
           },
@@ -611,10 +609,10 @@
       "encode": {
         "update": {
           "x": {
-            "value": 300
+            "signal": "width * 0.80 - 12"
           },
           "y": {
-            "value": 451
+            "value": 180
           },
           "x2": {
             "signal": "midX"
@@ -662,13 +660,13 @@
       "encode": {
         "update": {
           "x": {
-            "value": 180
+            "signal": "width * 0.80"
           },
           "y": {
-            "value": 466
+            "value": 145
           },
           "text": {
-            "value": "The flow from grazing into cropping is the largest,\noccupying most of the diagram and visually\novershadowing the smaller shifts."
+            "value": "The flow from grazing\ninto cropping is the largest,\noccupying most of the\ndiagram and visually\novershadowing the\nsmaller shifts."
           },
           "lineBreak": {
             "value": "\n"

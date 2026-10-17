@@ -1,7 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Percentage change in horticultural growing area from 2023-24 to 2024-25, centred on zero.",
-  "width": 630,
+  "width": "container",
+  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
   "height": 280,
   "data": {
     "url": "data/chart12_horticulture_area_change.csv",

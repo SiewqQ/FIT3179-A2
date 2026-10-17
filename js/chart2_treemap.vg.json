@@ -1,11 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-
   "width": 700,
   "height": 505,
   "padding": 5,
   "autosize": "none",
-
   "signals": [
     {
       "name": "totalArea",
@@ -16,41 +14,32 @@
       "value": 420
     }
   ],
-
   "data": [
     {
       "name": "tree",
       "url": "data/chart2_treemap.csv",
-
       "format": {
         "type": "csv",
-
         "parse": {
           "area_thousand_ha": "number"
         }
       },
-
       "transform": [
         {
           "type": "stratify",
           "key": "id",
           "parentKey": "parent"
         },
-
         {
           "type": "treemap",
-
           "field": "area_thousand_ha",
-
           "sort": {
             "field": "value",
             "order": "descending"
           },
-
           "round": true,
           "method": "squarify",
           "ratio": 1.4,
-
           "size": [
             {
               "signal": "width"
@@ -59,18 +48,13 @@
               "signal": "treeHeight"
             }
           ],
-
           "paddingInner": 3
         }
       ]
     },
-
-
     {
       "name": "groups",
-
       "source": "tree",
-
       "transform": [
         {
           "type": "filter",
@@ -78,13 +62,9 @@
         }
       ]
     },
-
-
     {
       "name": "leaves",
-
       "source": "tree",
-
       "transform": [
         {
           "type": "filter",
@@ -92,13 +72,9 @@
         }
       ]
     },
-
-
     {
       "name": "irrigatedCropping",
-
       "source": "leaves",
-
       "transform": [
         {
           "type": "filter",
@@ -106,13 +82,9 @@
         }
       ]
     },
-
-
     {
       "name": "irrigatedHorticulture",
-
       "source": "leaves",
-
       "transform": [
         {
           "type": "filter",
@@ -121,20 +93,16 @@
       ]
     }
   ],
-
-
   "scales": [
     {
       "name": "color",
       "type": "ordinal",
-
       "domain": [
         "grazing",
         "cropping",
         "horticulture",
         "intensive"
       ],
-
       "range": [
         "#AAB88A",
         "#E2C66D",
@@ -143,60 +111,43 @@
       ]
     }
   ],
-
-
   "marks": [
-
     {
       "type": "rect",
-
       "from": {
         "data": "leaves"
       },
-
       "encode": {
-        "enter": {
-
+        "update": {
           "x": {
             "field": "x0"
           },
-
           "y": {
             "field": "y0"
           },
-
           "x2": {
             "field": "x1"
           },
-
           "y2": {
             "field": "y1"
           },
-
           "fill": {
             "scale": "color",
             "field": "parent"
           },
-
           "stroke": {
             "value": "#ffffff"
           },
-
           "strokeWidth": {
             "value": 1.5
           },
-
           "tooltip": {
             "signal": "{'Land use': datum.category, 'Area': format(datum.area_thousand_ha / 1000, ',.3f') + ' million ha', 'Share': format((datum.area_thousand_ha / totalArea) * 100, '.2f') + '%'}"
-          }
-        },
-
-        "update": {
+          },
           "fillOpacity": {
             "value": 1
           }
         },
-
         "hover": {
           "fillOpacity": {
             "value": 0.65
@@ -204,441 +155,326 @@
         }
       }
     },
-
-
     {
       "type": "rect",
       "interactive": false,
-
       "from": {
         "data": "groups"
       },
-
       "encode": {
-        "enter": {
-
+        "update": {
           "x": {
             "field": "x0"
           },
-
           "y": {
             "field": "y0"
           },
-
           "x2": {
             "field": "x1"
           },
-
           "y2": {
             "field": "y1"
           },
-
           "fillOpacity": {
             "value": 0
           },
-
           "stroke": {
             "value": "#4A4A4A"
           },
-
           "strokeWidth": {
             "value": 1.3
           }
         }
       }
     },
-
-
     {
       "type": "text",
       "interactive": false,
-
       "from": {
         "data": "leaves"
       },
-
       "encode": {
-        "enter": {
-
+        "update": {
           "x": {
             "signal": "(datum.x0 + datum.x1) / 2"
           },
-
           "y": {
             "signal": "(datum.y0 + datum.y1) / 2 - 10"
           },
-
           "align": {
             "value": "center"
           },
-
           "baseline": {
             "value": "middle"
           },
-
           "text": {
             "signal": "datum.category === 'Grazing native vegetation' ? 'Grazing native\\nvegetation' : datum.category === 'Grazing modified pastures' ? 'Grazing\\nmodified\\npastures' : datum.category === 'Dryland cropping' ? 'Dryland\\ncropping' : datum.category"
           },
-
           "lineBreak": {
             "value": "\n"
           },
-
           "lineHeight": {
             "signal": "datum.category === 'Grazing modified pastures' ? 14 : 17"
           },
-
           "font": {
             "value": "DM Sans"
           },
-
           "fontSize": {
             "signal": "datum.category === 'Grazing modified pastures' ? 12 : datum.category === 'Dryland cropping' ? 12 : 14"
           },
-
           "fontWeight": {
             "value": "700"
           },
-
           "fill": {
             "value": "#222222"
-          }
-        },
-
-        "update": {
+          },
           "opacity": {
             "signal": "datum.area_thousand_ha >= 40000 ? 1 : 0"
           }
         }
       }
     },
-
-
     {
       "type": "text",
       "interactive": false,
-
       "from": {
         "data": "leaves"
       },
-
       "encode": {
-        "enter": {
-
+        "update": {
           "x": {
             "signal": "(datum.x0 + datum.x1) / 2"
           },
-
           "y": {
             "signal": "datum.category === 'Grazing modified pastures' ? (datum.y0 + datum.y1) / 2 + 36 : (datum.y0 + datum.y1) / 2 + 22"
           },
-
           "align": {
             "value": "center"
           },
-
           "baseline": {
             "value": "middle"
           },
-
           "text": {
             "signal": "format(datum.area_thousand_ha / 1000, ',.1f') + ' M ha'"
           },
-
           "font": {
             "value": "DM Sans"
           },
-
           "fontSize": {
             "value": 12
           },
-
           "fill": {
             "value": "#333333"
-          }
-        },
-
-        "update": {
+          },
           "opacity": {
             "signal": "datum.area_thousand_ha >= 40000 ? 1 : 0"
           }
         }
       }
     },
-
-
     {
-    "type": "rule",
-    "interactive": false,
-
-    "from": {
-        "data": "irrigatedCropping"
-    },
-
-    "encode": {
-        "enter": {
-
-        "x": {
-            "signal": "(datum.x0 + datum.x1) / 2"
-        },
-
-        "y": {
-            "signal": "(datum.y0 + datum.y1) / 2"
-        },
-
-        "x2": {
-            "value": 450
-        },
-
-        "y2": {
-            "value": 448
-        },
-
-        "stroke": {
-            "value": "#6E6A62"
-        },
-
-        "strokeWidth": {
-            "value": 1.5
-        }
-        }
-    }
-    },
-
-
-    {
-      "type": "text",
+      "type": "rule",
       "interactive": false,
-
       "from": {
         "data": "irrigatedCropping"
       },
-
       "encode": {
-        "enter": {
-
+        "update": {
           "x": {
-            "value": 450
+            "signal": "(datum.x0 + datum.x1) / 2"
           },
-
+          "y": {
+            "signal": "(datum.y0 + datum.y1) / 2"
+          },
+          "x2": {
+            "signal": "width * 450 / 700"
+          },
+          "y2": {
+            "value": 448
+          },
+          "stroke": {
+            "value": "#6E6A62"
+          },
+          "strokeWidth": {
+            "value": 1.5
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "irrigatedCropping"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "width * 450 / 700"
+          },
           "y": {
             "value": 455
           },
-
           "align": {
             "value": "center"
           },
-
           "baseline": {
             "value": "top"
           },
-
           "text": {
             "value": "Irrigated cropping"
           },
-
           "font": {
             "value": "DM Sans"
           },
-
           "fontSize": {
             "value": 14
           },
-
           "fontWeight": {
             "value": "700"
           },
-
           "fill": {
             "value": "#444842"
           }
         }
       }
     },
-
-
     {
       "type": "text",
       "interactive": false,
-
       "from": {
         "data": "irrigatedCropping"
       },
-
       "encode": {
-        "enter": {
-
+        "update": {
           "x": {
-            "value": 480
+            "signal": "width * 480 / 700"
           },
-
           "y": {
             "value": 478
           },
-
           "align": {
             "value": "center"
           },
-
           "baseline": {
             "value": "top"
           },
-
           "text": {
             "signal": "format(datum.area_thousand_ha / 1000, ',.3f') + ' M ha'"
           },
-
           "font": {
             "value": "DM Sans"
           },
-
           "fontSize": {
             "value": 12
           },
-
           "fill": {
             "value": "#687064"
           }
         }
       }
     },
-
-
     {
-    "type": "rule",
-    "interactive": false,
-
-    "from": {
-        "data": "irrigatedHorticulture"
-    },
-
-    "encode": {
-        "enter": {
-
-        "x": {
-            "signal": "(datum.x0 + datum.x1) / 2"
-        },
-
-        "y": {
-            "signal": "(datum.y0 + datum.y1) / 2"
-        },
-
-        "x2": {
-            "value": 620
-        },
-
-        "y2": {
-            "value": 448
-        },
-
-        "stroke": {
-            "value": "#6E6A62"
-        },
-
-        "strokeWidth": {
-            "value": 1.5
-        }
-        }
-    }
-    },
-
-
-    {
-      "type": "text",
+      "type": "rule",
       "interactive": false,
-
       "from": {
         "data": "irrigatedHorticulture"
       },
-
       "encode": {
-        "enter": {
-
+        "update": {
           "x": {
-            "value": 610
+            "signal": "(datum.x0 + datum.x1) / 2"
           },
-
+          "y": {
+            "signal": "(datum.y0 + datum.y1) / 2"
+          },
+          "x2": {
+            "signal": "width * 620 / 700"
+          },
+          "y2": {
+            "value": 448
+          },
+          "stroke": {
+            "value": "#6E6A62"
+          },
+          "strokeWidth": {
+            "value": 1.5
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "irrigatedHorticulture"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "width * 610 / 700"
+          },
           "y": {
             "value": 455
           },
-
           "align": {
             "value": "center"
           },
-
           "baseline": {
             "value": "top"
           },
-
           "text": {
             "value": "Irrigated horticulture"
           },
-
           "font": {
             "value": "DM Sans"
           },
-
           "fontSize": {
             "value": 14
           },
-
           "fontWeight": {
             "value": "700"
           },
-
           "fill": {
             "value": "#444842"
           }
         }
       }
     },
-
-
     {
       "type": "text",
       "interactive": false,
-
       "from": {
         "data": "irrigatedHorticulture"
       },
-
       "encode": {
-        "enter": {
-
+        "update": {
           "x": {
-            "value": 645
+            "signal": "width * 645 / 700"
           },
-
           "y": {
             "value": 478
           },
-
           "align": {
             "value": "center"
           },
-
           "baseline": {
             "value": "top"
           },
-
           "text": {
             "signal": "format(datum.area_thousand_ha / 1000, ',.3f') + ' M ha'"
           },
-
           "font": {
             "value": "DM Sans"
           },
-
           "fontSize": {
             "value": 12
           },
-
           "fill": {
             "value": "#687064"
           }
         }
       }
     }
-
   ]
 }

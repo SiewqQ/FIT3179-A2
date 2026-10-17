@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:wght@500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:wght@700&family=Lora:wght@500;600;700&display=swap"
         rel="stylesheet">
 
 </head>
@@ -47,102 +47,39 @@
 
 
     <!-- SECTION 1 -->
-    <section class="story-section">
-
+    <section class="story-section big-picture-section" aria-labelledby="big-picture-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                01 - THE BIG PICTURE
-            </p>
-
-            <h2>
-                More than half of Australia's land is classified for agricultural use
-            </h2>
-
-            <p>
-                Agricultural land covers a substantial share of Australia,
-                but that land is distributed very differently across grazing,
-                cropping, horticulture and other agricultural activities.
-            </p>
-
+            <h2 class="section-number" id="big-picture-label">01 - The Big Picture</h2>
         </div>
 
+        <div class="waffle-chart-wrapper">
+            <div id="waffle_chart"></div>
+        </div>
 
-        <div class="waffle-row">
-
-            <!-- LEFT: WAFFLE CHART -->
-            <div class="waffle-chart-wrapper">
-                <div id="waffle_chart"></div>
+        <div class="big-picture-copy">
+            <div class="big-picture-finding">
+                <div class="waffle-big-stat">54.5%</div>
+                <p class="waffle-callout-text">of Australia's land falls within agricultural-use classes.</p>
+            </div>
+            <div class="big-picture-introduction">
+                <p>
+                    Agricultural land covers a substantial share of Australia,
+                    but that land is distributed very differently across grazing,
+                    cropping, horticulture and other agricultural activities.
+                </p>
             </div>
 
-
-            <!-- RIGHT: CALLOUT -->
-            <aside class="waffle-callout">
-
-                <p class="callout-label">
-                    AUSTRALIA'S LAND
-                </p>
-
-                <div class="waffle-big-stat">
-                    54.5%
-                </div>
-
-                <p class="waffle-callout-text">
-                    of Australia's land falls within
-                    <strong>agricultural-use classes.</strong>
-                </p>
-
-                <p class="callout-note">
-                    This includes grazing native vegetation,
-                    grazing modified pastures, irrigated pastures,
-                    cropping, horticulture and other intensive
-                    agricultural uses.
-                </p>
-
-                <!-- <p class="callout-note">
-                    Each square represents approximately
-                    <strong>1% of Australia's land.</strong>
-                </p> -->
-
-            </aside>
-
         </div>
-
     </section>
 
-
     <!-- SECTION 2 -->
-    <section class="story-section">
-
+    <section class="story-section big-picture-section treemap-section" aria-labelledby="treemap-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                02 - WHAT MAKES UP AGRICULTURAL LAND?
-            </p>
-
-            <h2>
-                Grazing dominates Australia's agricultural land use
-            </h2>
-
-            <p>
-                Australia's agricultural land is not evenly divided.
-                Grazing occupies the overwhelming majority, while cropping
-                and horticulture use much smaller areas.
-            </p>
-
+            <h2 class="section-number" id="treemap-label">02 - What Makes Up Agricultural Land?</h2>
         </div>
 
-
-        <!-- Treemap + explanation -->
-        <div class="treemap-row">
-
-            <!-- LEFT: TREEMAP + COMPOSITION SUMMARY -->
-            <div class="treemap-left">
-
-                <div id="treemap_chart"></div>
-
-
-                <!-- COMPOSITION SUMMARY UNDER TREEMAP -->
+        <div class="treemap-left">
+            <div id="treemap_chart"></div>
                 <div class="treemap-summary-grid">
 
                     <div class="treemap-summary-item">
@@ -185,125 +122,72 @@
                     </div>
 
                 </div>
-
-            </div>
-
-
-            <!-- RIGHT: CALLOUT -->
-            <aside class="treemap-callout">
-
-                <p class="callout-label">
-                    AGRICULTURAL LAND COMPOSITION
-                </p>
-
-                <h3>
-                    Grazing accounts for almost nine-tenths of the agricultural-use area
-                </h3>
-
-                <p class="callout-note">
-                    Colours group the main agricultural activities, while nested
-                    rectangles show their subtypes. Rectangle area is proportional
-                    to actual land area. 
-                </p>
-
-            </aside>
-
         </div>
 
+        <div class="big-picture-copy">
+            <h3 class="treemap-headline">Grazing dominates at nearly 90%</h3>
+            <div class="treemap-finding">
+                <p>
+                    Australia's agricultural land is not evenly divided.
+                    Grazing occupies the overwhelming majority, while cropping
+                    and horticulture use much smaller areas.
+                </p>
+            </div>
+            <div class="big-picture-introduction">
+                <p>
+                    Colours group the main agricultural activities, while nested
+                    rectangles show their subtypes. Rectangle area is proportional
+                    to actual land area.
+                </p>
+            </div>
+        </div>
     </section>
 
     <!-- SECTION 3 -->
-    <section class="story-section">
-
+    <section class="story-section big-picture-section bar-section" aria-labelledby="bar-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                03 - WHICH ACTIVITY USES THE MOST LAND?
-            </p>
-
-            <h2>
-                Grazing uses almost nine times as much land as cropping
-            </h2>
-
-            <p>
-                The treemap reveals the structure of agricultural land, but bar length allows the four major activities to be compared more precisely on a common scale. Grazing occupies
-                substantially more land than cropping, while horticulture and
-                intensive agriculture account for only a small fraction.
-            </p>
-
+            <h2 class="section-number" id="bar-label">03 - Which Activity Uses the Most Land?</h2>
         </div>
 
+        <div class="bar-chart-wrapper">
+            <div id="landuse_bar_chart"></div>
+        </div>
 
-        <div class="bar-chart-row">
-
-            <div class="bar-chart-wrapper">
-
-                <div id="landuse_bar_chart"></div>
-
-            </div>
-
-
-            <aside class="bar-callout">
-
-                <p class="callout-label">
-                    THE SCALE OF GRAZING
-                </p>
-
-                <div class="bar-big-stat">
-                    8.8×
-                </div>
-
+        <div class="big-picture-copy">
+            <p class="callout-label bar-finding-label">THE SCALE OF GRAZING</p>
+            <div class="bar-finding">
+                <div class="bar-big-stat">8.8&times;</div>
                 <p class="bar-callout-text">
                     Grazing occupies approximately 8.8 times as much
                     agricultural-use land as cropping.
                 </p>
-
-                <p class="callout-note">
-                    Cropping ranks second, but still uses far less land than grazing. Horticulture and intensive agriculture make up only a tiny share.
+            </div>
+            <div class="big-picture-introduction">
+                <p>
+                    The treemap reveals the structure of agricultural land, but bar length
+                    allows the four major activities to be compared more precisely on a common scale.
+                    Grazing occupies substantially more land than cropping, while horticulture
+                    and intensive agriculture account for only a small fraction.
                 </p>
-
-            </aside>
-
+            </div>
         </div>
-
     </section>
 
     <!-- SECTION 4 -->
-    <section class="story-section change-section">
-
+    <section class="story-section change-section big-picture-section slope-section" aria-labelledby="slope-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                04 - HOW HAS AGRICULTURAL LAND CHANGED?
-            </p>
-
-            <h2>
-                Cropping expanded by 32% while grazing declined slightly
-            </h2>
-
-            <p>
-                Australia's agricultural footprint shifted unevenly between
-                2010-11 and 2020-21. Cropping recorded the largest absolute
-                expansion, gaining about 10.4 million hectares, while grazing
-                declined by about 9.5 million hectares. Horticulture and intensive
-                agriculture also increased, although from much smaller land bases.
-            </p>
-
+            <h2 class="section-number" id="slope-label">04 - How Has Agricultural Land Changed?</h2>
         </div>
 
+        <div class="slope-chart-wrapper">
+            <div id="slope_chart"></div>
+        </div>
 
-        <div class="slope-row">
+        <div class="big-picture-copy">
+            <p class="callout-label slope-finding-label">A DECADE OF CHANGE</p>
+            <div class="slope-finding">
 
-            <div class="slope-chart-wrapper">
-                <div id="slope_chart"></div>
-            </div>
-
-
-            <aside class="slope-callout">
-
-                <p class="callout-label">
-                    A DECADE OF CHANGE
-                </p>
+                
 
                 <div class="change-item positive">
                     <strong>+32.4%</strong>
@@ -329,191 +213,107 @@
                     <small>+0.036 M ha</small>
                 </div>
 
-                <!-- <p class="callout-note">
-                    The chart is indexed to 2010-11 = 100 so relative changes
-                    can be compared despite very different starting land areas.
-                    Absolute changes are shown above for context.
-                </p> -->
+                
 
-            </aside>
-
+            
+            </div>
+            <div class="big-picture-introduction">
+                <p>
+                Australia's agricultural footprint changed unevenly from 2010–11 to 2020–21.
+                Cropping gained about <strong>10.4 million hectares</strong>, while grazing fell by <strong>9.5 million hectares</strong>.
+                Horticulture and intensive agriculture also grew from much smaller bases.
+            </p>
+            </div>
         </div>
-
     </section>
 
     <!-- SECTION 5 -->
-    <section class="story-section">
-
+    <section class="story-section big-picture-section sankey-section" aria-labelledby="sankey-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                05 - WHERE DID THE LAND SHIFT?
-            </p>
-
-            <h2>
-                The largest net shift was from grazing into cropping
-            </h2>
-
-            <p>
-                The expansion of cropping was closely matched by a major
-                net shift from grazing-related land into cropping. Smaller
-                shifts also occurred towards horticulture and intensive
-                agriculture.
-            </p>
-
+            <h2 class="section-number" id="sankey-label">05 - Where Did the Land Shift?</h2>
         </div>
 
+        <div class="sankey-chart-wrapper">
+            <div id="sankey_chart"></div>
+        </div>
 
-        <div class="sankey-row">
-
-            <div class="sankey-chart-wrapper">
-
-                <div id="sankey_chart"></div>
-
-            </div>
-
-
-            <aside class="sankey-callout">
-
-                <p
-                    class="callout-label"
-                    id="sankey_callout_label"
-                >
-                    THE DOMINANT SHIFT
-                </p>
-
-
-                <div
-                    class="sankey-big-stat"
-                    id="sankey_big_stat"
-                >
-                    10.4 M ha
-                </div>
-
-
-                <p
-                    class="sankey-callout-text"
-                    id="sankey_callout_text"
-                >
+        <div class="big-picture-copy">
+            <div class="sankey-big-stat" id="sankey_big_stat">10.4 M ha</div>
+            <div class="sankey-finding">
+                <p class="sankey-callout-text" id="sankey_callout_text">
                     was the net shift from grazing-related land uses
                     towards cropping between 2010-11 and 2020-21.
                 </p>
-
-
                 <p class="sankey-interaction-hint">
                     Hover over a ribbon to explore a shift.
                     Click a ribbon to keep it highlighted.
                 </p>
-
-
-                <!-- <p class="callout-note">
-                    Flows represent net land-use shifts,
-                    not individual parcel conversions.
-                </p> -->
-
-
-                <!-- <p class="callout-note">
-                    Major net shifts of at least 0.020 million hectares
-                    are shown. Smaller shifts are omitted for readability.
-                </p> -->
-
-            </aside>
-
+            </div>
+            <div class="big-picture-introduction">
+                <p>
+                    The expansion of cropping was closely matched by a major
+                    net shift from grazing-related land into cropping. Smaller
+                    shifts also occurred towards horticulture and intensive agriculture.
+                </p>
+            </div>
         </div>
-
     </section>
 
-    <section class="story-section">
-
+    <!-- SECTION 6 -->
+    <section class="story-section big-picture-section choropleth-section" aria-labelledby="choropleth-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                06 - WHERE IS AGRICULTURE MOST DOMINANT?
-            </p>
-
-            <h2>
-                Agricultural-use land covers around three-quarters of Queensland and New South Wales
-            </h2>
-
-            <p>
-                Agricultural land is not distributed evenly across Australia.
-                Queensland and New South Wales have the highest shares of their
-                landscapes classified within agricultural-use categories, while
-                Tasmania and the Australian Capital Territory have much lower shares.
-            </p>
-
+            <h2 class="section-number" id="choropleth-label">06 - Where Is Agriculture Most Dominant?</h2>
         </div>
 
-        <div class="map-row">
+        <div class="map-chart-wrapper">
+            <div id="choropleth_chart"></div>
+        </div>
 
-            <div class="map-chart-wrapper">
-                <div id="choropleth_chart"></div>
-            </div>
-
-            <aside class="map-callout">
-
-                <p class="callout-label">
-                    HIGHEST SHARES
-                </p>
-
+        <div class="big-picture-copy">
+            <p class="callout-label choropleth-finding-label">HIGHEST SHARES</p>
+            <div class="choropleth-finding">
                 <div class="state-stat">
                     <strong>Queensland</strong>
                     <span>79.2%</span>
                 </div>
-
                 <div class="state-stat">
                     <strong>New South Wales</strong>
                     <span>76.4%</span>
                 </div>
-
                 <div class="state-stat">
                     <strong>Victoria</strong>
                     <span>56.2%</span>
                 </div>
-
                 <p class="callout-note">
                     This contrast shows how unevenly agricultural land is distributed across Australia's states and territories.
                 </p>
-
-            </aside>
-
+            </div>
+            <div class="big-picture-introduction">
+                <p>
+                    Agricultural land is not distributed evenly across Australia.
+                    Queensland and New South Wales have the highest shares of their
+                    landscapes classified within agricultural-use categories, while
+                    Tasmania and the Australian Capital Territory have much lower shares.
+                </p>
+            </div>
         </div>
-
     </section>
 
-    <section class="story-section">
-
+    <!-- SECTION 7 -->
+    <section class="story-section big-picture-section binmap-section" aria-labelledby="binmap-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                07 - WHERE ARE DIFFERENT AGRICULTURAL ACTIVITIES CONCENTRATED?
-            </p>
-
-            <h2>
-                Australia's agricultural activities form distinct spatial patterns
-            </h2>
-
-            <p>
-                State averages hide substantial variation within Australia.
-                Use the selector to explore where grazing, cropping and
-                horticulture are concentrated at a finer spatial scale.
-            </p>
-
+            <h2 class="section-number" id="binmap-label">07 - Where Are Different Agricultural Activities Concentrated?</h2>
         </div>
 
-        <div class="map-row">
+        <div class="map-chart-wrapper">
+            <div id="binmap_chart"></div>
+        </div>
 
-            <!-- LEFT: BIN MAP -->
-            <div class="map-chart-wrapper">
-                <div id="binmap_chart"></div>
-            </div>
+        <div class="big-picture-copy">
+            <p class="callout-label binmap-controls-label">EXPLORE LAND USE</p>
+            <div class="binmap-controls">
 
-            <!-- RIGHT: CALLOUT / EXPLANATION -->
-            <aside class="map-callout">
-
-                <p class="callout-label">
-                    EXPLORE LAND USE
-                </p>
+                
 
                 <div class="map-selector">
                     <label for="landuse_select"><strong>Land use:</strong></label>
@@ -538,60 +338,33 @@
                     </div>
                 </div>
 
+                
+
+                        </div>
+            <div class="big-picture-introduction">
                 <p>
-                    Each square represents an area of approximately
-                    50 × 50 kilometres.
+                    State averages hide substantial variation within Australia.
+                    Use the selector to explore where grazing, cropping and
+                    horticulture are concentrated at a finer spatial scale.
                 </p>
-
-                <!-- <p class="callout-note">
-                    Darker cells indicate that the selected agricultural
-                    activity occupies a larger share of mapped land within
-                    that bin.
-                </p> -->
-
-            </aside>
-
+                <p class="binmap-cell-note">Each square represents an area of approximately 50 &times; 50 kilometres.</p>
+            </div>
         </div>
-
     </section>
 
     <!-- SECTION 8 -->
-    <section class="story-section">
-
+    <section class="story-section big-picture-section heatmap-section" aria-labelledby="heatmap-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                08 - HOW DOES THE AGRICULTURAL MIX DIFFER BY STATE?
-            </p>
-
-            <h2>
-                Grazing dominates agricultural land in every state, while Victoria has the most balanced mix
-            </h2>
-
-            <p>
-                The composition of agricultural-use land differs considerably across Australia.
-                Grazing accounts for the majority of agricultural land in every state and territory,
-                but Victoria stands out because cropping occupies almost as much agricultural land as grazing.
-            </p>
-
+            <h2 class="section-number" id="heatmap-label">08 - How Does the Agricultural Mix Differ by State?</h2>
         </div>
 
+        <div class="heatmap-chart-wrapper">
+            <div id="heatmap_chart"></div>
+        </div>
 
-        <div class="heatmap-row">
-
-            <!-- LEFT: HEATMAP -->
-            <div class="heatmap-chart-wrapper">
-                <div id="heatmap_chart"></div>
-            </div>
-
-
-            <!-- RIGHT: CALLOUT -->
-            <aside class="heatmap-callout">
-
-                <p class="callout-label">
-                    MOST BALANCED MIX
-                </p>
-
+        <div class="big-picture-copy">
+            <p class="callout-label heatmap-finding-label">MOST BALANCED MIX</p>
+            <aside class="heatmap-finding">
                 <div class="heatmap-big-stat">
                     Victoria
                 </div>
@@ -611,107 +384,73 @@
                     <strong>2.3%</strong>
                 </div>
 
-                <p class="callout-note">
-                    Victoria has the most even split between grazing and cropping,
-                    unlike most other states where grazing clearly dominates.
-                </p>
-
-                <p class="callout-note">
-                    Queensland, Western Australia and the Northern Territory remain strongly grazing-oriented, creating a clear contrast with Victoria.
-                </p>
-
-                <!-- <p class="callout-note">
-                    ACT should be interpreted carefully because its total agricultural-use
-                    area is very small compared with the other states and territories.
-                </p> -->
-
             </aside>
-
+            <div class="big-picture-introduction">
+                <p>
+                    Grazing accounts for the majority of agricultural land in every state and territory, but Victoria has the most even split between grazing and cropping, unlike most other states where grazing clearly dominates. Queensland, Western Australia and the Northern Territory remain strongly grazing-oriented, creating a clear contrast with Victoria.
+                </p>
+            </div>
         </div>
-
     </section>
 
     <!-- SECTION 9 -->
-    <section class="story-section">
-
+    <section class="story-section big-picture-section crop-symbol-section" aria-labelledby="crop-symbol-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                09 - WHERE ARE AUSTRALIA'S BROADACRE CROPS GROWN?
-            </p>
-
-            <h2>
-                Broadacre crops follow very different geographic patterns across Australia
-            </h2>
-
-            <p>
-                The amount of land devoted to individual crops varieHover over s substantially
-                between states. Comparing six crops side by side reveals which states specialise in particular crops and where production is most concentrated. 
-            </p>
-
+            <h2 class="section-number" id="crop-symbol-label">09 - Where Are Australia's Broadacre Crops Grown?</h2>
         </div>
 
+        <div class="crop-map-wrapper">
+            <div id="crop_symbol_map"></div>
+        </div>
 
-        <div class="crop-map-row">
-
-            <!-- SIX CROP MAPS -->
-            <div class="crop-map-wrapper">
-                <div id="crop_symbol_map"></div>
-            </div>
-
-
-            <!-- SHARED READING GUIDE -->
-            <aside class="crop-map-callout">
-
-                <p class="callout-label">
-                    CROP PATTERNS ACROSS AUSTRALIA
+        <div class="big-picture-copy">
+            <p class="callout-label crop-symbol-controls-label">CROP PATTERNS ACROSS AUSTRALIA</p>
+            <div class="crop-symbol-controls">
+                <div class="crop-selector">
+                    <label for="crop_map_select"><strong>Crop:</strong></label>
+                    <select id="crop_map_select">
+                        <option value="Wheat">Wheat</option>
+                        <option value="Barley">Barley</option>
+                        <option value="Canola">Canola</option>
+                        <option value="Chickpeas">Chickpeas</option>
+                        <option value="Sorghum">Sorghum</option>
+                        <option value="Cotton">Cotton</option>
+                    </select>
+                </div>
+                <p>
+                    The amount of land devoted to individual crops varies substantially
+                    between states. Use the crop selector to explore which states specialise
+                    in each crop and where production is most concentrated.
                 </p>
-
-                <p class="callout-note">
+            </div>
+            <div class="big-picture-introduction">
+                <p>
                     Wheat has the broadest geographic footprint, with large planted areas across Western Australia, South Australia, New South Wales and Victoria.
                 </p>
-
-                <p class="callout-note">
+                <p class="crop-pattern-note">
                     Canola is strongest in the southern states, particularly Western Australia, Victoria and New South Wales.
                 </p>
-
-                <p class="callout-note">
+                <p class="crop-pattern-note">
                     Chickpeas are more concentrated in eastern Australia, while sorghum and cotton are much more strongly centred on Queensland and New South Wales.
                 </p>
-
-                <!-- <p class="callout-note">
-                    Together, the six crops reveal that Australia's broadacre production is highly geographically specialised, rather than evenly distributed across the country.
-                </p> -->
-
-            </aside>
-
+            </div>
         </div>
-
     </section>
 
     <!-- SECTION 10 -->
-    <section class="story-section">
-
+    <section class="story-section big-picture-section bump-section" aria-labelledby="bump-label">
         <div class="section-heading">
-            <p class="section-number">
-                10 - WHICH BROADACRE CROPS GAINED OR LOST RANK IN PLANTED AREA?
-            </p>
-            <h2>Barley overtook canola while chickpeas surged into fourth place</h2>
-            <p>
-                After comparing where these crops are grown, explore how their
-                national planted-area rankings changed from 2022–23 to 2024–25.
-                Rankings compare the same six crops shown in the maps above;
-                first place means the largest planted area among these six.
-            </p>
+            <h2 class="section-number" id="bump-label">10 - Which Broadacre Crops Gained or Lost Rank in Planted Area?</h2>
         </div>
 
-        <div class="slope-row">
-            <div class="slope-chart-wrapper">
-                <div id="crop_bump_chart"></div>
-            </div>
+        <div class="slope-chart-wrapper">
+            <div id="crop_bump_chart"></div>
+        </div>
 
-            <aside class="slope-callout">
-                <p class="callout-label">RANKING SHIFTS</p>
+        <div class="big-picture-copy">
+            <p class="callout-label bump-finding-label">RANKING SHIFTS</p>
+            <div class="bump-finding">
+                
                 <div class="hort-area-stat">
                     <strong><span>Barley</span></strong><strong>3rd → 2nd</strong>
                 </div>
@@ -721,57 +460,39 @@
                 <div class="hort-area-stat">
                     <strong><span>Cotton</span></strong><strong>4th → 6th</strong>
                 </div>
-                <p class="callout-note">
+                
+                
+                
+            
+            </div>
+            <div class="big-picture-introduction">
+                <p >
                     Wheat stayed first throughout. Barley overtook canola
                     in 2023–24 and held second place in 2024–25.
                 </p>
-                <p class="callout-note">
+                <p class="bump-detail-note">
                     Chickpea area rose from <strong>288,825 ha</strong> to
                     <strong>1,026,798 ha</strong> in the final year,
                     lifting its rank from sixth to fourth.
                 </p>
-                
-            </aside>
+            </div>
         </div>
-
     </section>
 
     <!-- SECTION 11 -->
-    <section class="story-section">
-
+    <!-- Chart 11 temporarily disabled; remove this comment wrapper to restore.
+<section class="story-section big-picture-section scatter-section" aria-labelledby="scatter-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                11 - DOES MORE CROPLAND GENERATE GREATER VALUE?
-            </p>
-
-            <h2>
-                 States planting more land to a crop generally generate greater crop value
-            </h2>
-
-            <p>
-                The relationship between land allocation and crop value can be
-                compared across Australian states. 
-            </p>
-
+            <h2 class="section-number" id="scatter-label">11 - Does More Cropland Generate Greater Value?</h2>
         </div>
 
+        <div class="scatter-chart-wrapper">
+            <div id="crop_value_scatter"></div>
+        </div>
 
-        <div class="scatter-row">
-
-            <!-- LEFT: SCATTER PLOT -->
-            <div class="scatter-chart-wrapper">
-                <div id="crop_value_scatter"></div>
-            </div>
-
-
-            <!-- RIGHT: CALLOUT -->
-            <aside class="scatter-callout">
-
-                <p class="callout-label">
-                    EXPLORE CROPS
-                </p>
-
+        <div class="big-picture-copy">
+            <div class="scatter-controls">
+                <p class="callout-label">EXPLORE CROPS</p>
                 <div class="scatter-selector">
 
                     <label for="scatter_crop_select">
@@ -789,68 +510,43 @@
 
                     </select>
 
-                </div>
-
-
-                <p class="callout-label">
-                    AREA AND VALUE
+                </div>                <p>
+                    The relationship between land allocation and crop value can be
+                    compared across Australian states.
                 </p>
-
-                <p class="callout-note">
+            </div>
+            <div class="big-picture-introduction">
+                <p class="callout-label">AREA AND VALUE</p>
+                <p class="scatter-reading-note">
                     Moving right means more hectares are planted to the crop.
                 </p>
-
-                <p class="callout-note">
+                <p class="scatter-reading-note">
                     Moving upward means the crop generates a greater local value.
                 </p>
-
-                <p class="callout-note">
+                <p class="scatter-reading-note">
                     A general movement from the lower-left toward the upper-right
                     indicates a positive relationship between crop area and value.
                 </p>
-
-            </aside>
-
+            </div>
         </div>
-
     </section>
+    -->
 
     <!-- SECTION 12 -->
-    <section class="story-section">
-
+    <section class="story-section big-picture-section horticulture-section" aria-labelledby="horticulture-label">
         <div class="section-heading">
-
-            <p class="section-number">
-                12 - HOW HAS THE VALUE OF HORTICULTURE CHANGED?
-            </p>
-
-            <h2>
-                Fruit and vegetables increased in value while wine grapes remained below 2020-21 levels
-            </h2>
-
-            <p>
-                Australia's horticultural industries have followed different economic
-                paths since 2020-21. Fruit and vegetables recorded substantial growth,
-                while wine grapes declined before beginning a partial recovery.
-            </p>
-
+            <h2 class="section-number" id="horticulture-label">11 - How Has the Value of Horticulture Changed?</h2>
         </div>
 
+        <div class="horticulture-chart-wrapper">
+            <div id="horticulture_trend_chart"></div>
+        </div>
 
-        <div class="horticulture-row">
+        <div class="big-picture-copy">
+            <p class="callout-label horticulture-finding-label">2020-21 TO 2024-25</p>
+            <div class="horticulture-finding">
 
-            <!-- LEFT: LINE CHART -->
-            <div class="horticulture-chart-wrapper">
-                <div id="horticulture_trend_chart"></div>
-            </div>
-
-
-            <!-- RIGHT: CALLOUT -->
-            <aside class="horticulture-callout">
-
-                <p class="callout-label">
-                    2020-21 TO 2024-25
-                </p>
+                
 
                 <div class="horticulture-stat">
                     <strong><span>Fruit</span></strong>
@@ -872,97 +568,20 @@
                     <strong>-27.5%</strong>
                 </div>
 
-                <p class="callout-note">
-                    Fruit remained the largest horticultural group by farm-gate
-                    value, reaching approximately A$7.34 billion in 2024-25.
-                </p>
+                
 
-                <p class="callout-note">
-                    Nut values were more volatile, falling sharply in 2022-23
-                    before recovering strongly.
-                </p>
+                
 
-            </aside>
-
-        </div>
-
-    </section>
-
-    <!-- SECTION 13 -->
-    <section class="story-section">
-
-        <div class="section-heading">
-
-            <p class="section-number">
-                13 - WHICH HORTICULTURAL CROPS EXPANDED THEIR GROWING AREA?
-            </p>
-
-            <h2>
-                Macadamia area expanded while banana area contracted
-            </h2>
-
-            <p>
-                Selected horticultural crops followed different land-allocation
-                patterns between 2023-24 and 2024-25. Macadamia growing area
-                increased, avocado area remained almost unchanged, while banana
-                area declined.
-            </p>
-
-        </div>
-
-
-        <!-- CHART + CALLOUT ROW -->
-        <div class="hort-area-row">
-
-
-            <!-- LEFT: PERCENTAGE-CHANGE BAR CHART -->
-            <div class="hort-area-chart-wrapper">
-
-                <div id="hort_area_change_chart"></div>
-
+            
             </div>
-
-
-            <!-- RIGHT: CALLOUT -->
-            <aside class="hort-area-callout">
-
-                <p class="callout-label">
-                    AREA CHANGE
-                </p>
-
-                <div class="hort-area-stat">
-                    <strong><span>Macadamias</span></strong>
-                    <strong>+5.3%</strong>
-                </div>
-
-                <div class="hort-area-stat">
-                    <strong><span>Avocados</span></strong>
-                    <strong>+0.1%</strong>
-                </div>
-
-                <div class="hort-area-stat negative">
-                    <strong><span>Bananas</span></strong>
-                    <strong>-4.6%</strong>
-                </div>
-
-
-                <p class="callout-note">
-                    Macadamia growing area increased by about
-                    <strong>2,356 hectares</strong>, the largest expansion
-                    among the selected crops.
-                </p>
-
-
-                <p class="callout-note">
-                    Avocado area remained almost unchanged, while banana
-                    growing area decreased by around
-                    <strong>620 hectares</strong>.
-                </p>
-
-            </aside>
-
+            <div class="big-picture-introduction">
+                <p>
+                Australia's horticultural industries have followed different economic
+                paths since 2020-21. Fruit and vegetables recorded substantial growth,
+                while wine grapes declined before beginning a partial recovery.
+            </p>
+            </div>
         </div>
-
     </section>
 
     <footer class="story-section page-credits" aria-label="Authorship, data sources and AI declaration">
