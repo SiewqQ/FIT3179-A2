@@ -1,7 +1,11 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
-  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  },
   "height": 430,
   "params": [
     {
@@ -32,6 +36,14 @@
       "titlePadding": 12,
       "gridColor": "#E8E8E8",
       "domainColor": "#AAAAAA"
+    },
+    "legend": {
+      "labelFont": "DM Sans",
+      "labelFontSize": 13,
+      "labelFontWeight": 400,
+      "titleFont": "DM Sans",
+      "titleFontSize": 13,
+      "titleFontWeight": 700
     }
   },
   "mark": {
@@ -120,9 +132,13 @@
         "orient": "bottom",
         "direction": "horizontal",
         "columns": 8,
-        "labelFontSize": 12,
-        "titleFontSize": 12,
-        "symbolSize": 130
+        "labelFontSize": 13,
+        "titleFontSize": 13,
+        "symbolSize": 130,
+        "labelFont": "DM Sans",
+        "labelFontWeight": 400,
+        "titleFont": "DM Sans",
+        "titleFontWeight": 700
       }
     }
   }

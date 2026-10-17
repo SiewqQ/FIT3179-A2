@@ -2,7 +2,11 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Percentage change in horticultural growing area from 2023-24 to 2024-25, centred on zero.",
   "width": "container",
-  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  },
   "height": 280,
   "data": {
     "url": "data/chart12_horticulture_area_change.csv",
@@ -99,14 +103,26 @@
           "type": "nominal",
           "title": null,
           "scale": {
-            "domain": ["Expansion", "Contraction"],
-            "range": ["#58734A", "#A45E46"]
+            "domain": [
+              "Expansion",
+              "Contraction"
+            ],
+            "range": [
+              "#58734A",
+              "#A45E46"
+            ]
           },
           "legend": {
             "orient": "bottom",
             "direction": "horizontal",
             "columns": 2,
-            "symbolType": "square"
+            "symbolType": "square",
+            "labelFont": "DM Sans",
+            "labelFontSize": 13,
+            "labelFontWeight": 400,
+            "titleFont": "DM Sans",
+            "titleFontSize": 13,
+            "titleFontWeight": 700
           }
         },
         "tooltip": [
@@ -222,7 +238,12 @@
       "titlePadding": 12
     },
     "legend": {
-      "labelFontSize": 11
+      "labelFontSize": 13,
+      "labelFont": "DM Sans",
+      "labelFontWeight": 400,
+      "titleFont": "DM Sans",
+      "titleFontSize": 13,
+      "titleFontWeight": 700
     }
   }
 }

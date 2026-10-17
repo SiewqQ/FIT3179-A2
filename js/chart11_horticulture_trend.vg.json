@@ -1,14 +1,15 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-
   "width": "container",
-  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  },
   "height": 420,
-
   "data": {
     "url": "data/chart11_horticulture_value_trend.csv"
   },
-
   "mark": {
     "type": "line",
     "point": {
@@ -17,7 +18,6 @@
     },
     "strokeWidth": 2.5
   },
-
   "encoding": {
     "x": {
       "field": "year",
@@ -35,7 +35,6 @@
         "grid": false
       }
     },
-
     "y": {
       "field": "farm_gate_value_million_aud",
       "type": "quantitative",
@@ -48,7 +47,6 @@
         "labelExpr": "'$' + format(datum.value / 1000, '.1~f') + 'B'"
       }
     },
-
     "color": {
       "field": "category",
       "type": "nominal",
@@ -73,10 +71,15 @@
         "orient": "bottom",
         "direction": "horizontal",
         "columns": 5,
-        "labelLimit": 220
+        "labelLimit": 220,
+        "labelFont": "DM Sans",
+        "labelFontSize": 13,
+        "labelFontWeight": 400,
+        "titleFont": "DM Sans",
+        "titleFontSize": 13,
+        "titleFontWeight": 700
       }
     },
-
     "tooltip": [
       {
         "field": "year",
@@ -94,23 +97,24 @@
       }
     ]
   },
-
   "config": {
     "background": "white",
     "font": "DM Sans",
-
     "view": {
       "stroke": null
     },
-
     "axis": {
       "labelFontSize": 11,
       "titleFontSize": 12,
       "titlePadding": 12
     },
-
     "legend": {
-      "labelFontSize": 11
+      "labelFontSize": 13,
+      "labelFont": "DM Sans",
+      "labelFontWeight": 400,
+      "titleFont": "DM Sans",
+      "titleFontSize": 13,
+      "titleFontWeight": 700
     }
   }
 }

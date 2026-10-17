@@ -111,7 +111,13 @@
               3000000,
               5000000
             ],
-            "columns": 5
+            "columns": 5,
+            "labelFont": "DM Sans",
+            "labelFontSize": 13,
+            "labelFontWeight": 400,
+            "titleFont": "DM Sans",
+            "titleFontSize": 13,
+            "titleFontWeight": 700
           }
         },
         "tooltip": [
@@ -175,7 +181,7 @@
           "type": "quantitative"
         },
         "text": {
-            "field": "state"
+          "field": "state"
         },
         "tooltip": [
           {
@@ -210,8 +216,12 @@
       "stroke": null
     },
     "legend": {
-      "labelFontSize": 11,
-      "titleFontSize": 12
+      "labelFontSize": 13,
+      "titleFontSize": 13,
+      "labelFont": "DM Sans",
+      "labelFontWeight": 400,
+      "titleFont": "DM Sans",
+      "titleFontWeight": 700
     }
   }
 }

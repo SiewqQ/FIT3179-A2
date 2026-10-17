@@ -80,7 +80,8 @@ body {
 .page-header p {
     max-width: 720px;
 
-    margin: 0 auto;
+    margin: 0;
+    text-align: left;
 
     font-size: 18px;
     line-height: 1.65;
@@ -103,6 +104,111 @@ body {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
+}
+
+.chart-method-note {
+    margin: 12px 0 0;
+    max-width: 900px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.chart-method-note a {
+    color: var(--accent);
+    text-underline-offset: 2px;
+}
+
+.treemap-detail {
+    margin: 0 0 28px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+.treemap-detail summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.treemap-detail summary:focus-visible,
+.detail-chart-scroll:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.treemap-detail-copy {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    margin: 14px 0 18px;
+    align-items: start;
+}
+
+.treemap-detail-copy p {
+    margin: 0;
+    color: var(--body-text);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.treemap-detail-copy p + p {
+    padding-left: 24px;
+    border-left: 2px solid var(--border);
+}
+
+@media (max-width: 600px) {
+    .treemap-detail-copy {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .treemap-detail-copy p + p {
+        padding-left: 0;
+        padding-top: 14px;
+        border-left: none;
+        border-top: 2px solid var(--border);
+    }
+}
+
+.detail-chart-scroll {
+    overflow-x: auto;
+    margin-top: 18px;
+}
+
+#treemap_detail_chart {
+    width: 100%;
+    min-width: 600px;
+}
+
+.concluding-takeaway h2 {
+    margin: 0 0 26px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 1.6px;
+    color: #22643B;
+}
+
+.concluding-takeaway .takeaway-key-message {
+    margin: 0 0 18px;
+    font-family: "Libre Baskerville", Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text);
+}
+
+.concluding-takeaway p {
+    max-width: 850px;
+    margin: 0;
+    color: var(--body-text);
+}
+
+.concluding-takeaway p + p {
+    margin-top: 14px;
 }
 
 /* Scale the entire chart proportionally inside the available chart column. */
@@ -187,7 +293,7 @@ body {
 
     letter-spacing: 1.6px;
 
-    color: #20351B;
+    color: #22643B;
 
     margin: 0 0 12px;
 }
@@ -290,6 +396,10 @@ select:focus {
     max-width: none;
 }
 
+.bar-section > .section-heading {
+    width: 100%;
+}
+
 .big-picture-section .section-heading .section-number {
     max-width: none;
     margin: 0;
@@ -298,7 +408,7 @@ select:focus {
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: 1.6px;
-    color: #20351B;
+    color: #22643B;
 }
 
 .big-picture-section > .waffle-chart-wrapper,
@@ -322,15 +432,57 @@ select:focus {
 .big-picture-section .treemap-headline,
 .big-picture-section .bar-big-stat,
 .big-picture-section .sankey-big-stat,
+.big-picture-section .heatmap-big-stat,
 .slope-finding .change-item strong {
     font-family: "Libre Baskerville", Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: normal;
 }
 
 .big-picture-copy {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 32px;
+    column-gap: 32px;
+    row-gap: 14px;
     align-items: start;
+}
+
+.big-picture-copy > div > p:not(.callout-label):not(.chart-method-note):not(.sankey-interaction-hint):not(.binmap-cell-note) {
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--body-text);
+}
+
+.big-picture-copy .state-stat,
+.big-picture-copy .heatmap-stat-row,
+.big-picture-copy .horticulture-stat,
+.big-picture-copy .hort-area-stat {
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+}
+
+.big-picture-copy .state-stat strong,
+.big-picture-copy .state-stat span {
+    font-weight: 700;
+}
+
+.big-picture-copy .waffle-big-stat,
+.big-picture-copy .bar-big-stat,
+.big-picture-copy .sankey-big-stat,
+.big-picture-copy .heatmap-big-stat {
+    margin: 0 0 14px;
+}
+
+.big-picture-copy .callout-label {
+    font-size: 18px;
+    line-height: 1.3;
+    color: var(--accent);
 }
 
 .heatmap-finding {
@@ -458,6 +610,11 @@ select:focus {
 
 .binmap-section .binmap-cell-note {
     margin-top: 18px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--muted);
 }
 
 .choropleth-finding-label {
@@ -512,8 +669,8 @@ select:focus {
 }
 
 .slope-finding .change-item strong {
-    font-size: 23px;
-    line-height: 1.15;
+    font-size: 22px;
+    line-height: 1.3;
 }
 
 .slope-finding .change-item span {
@@ -523,7 +680,7 @@ select:focus {
 }
 
 .slope-finding .change-item small {
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.4;
 }
 
@@ -552,7 +709,7 @@ select:focus {
 }
 
 .treemap-section .big-picture-copy {
-    row-gap: 18px;
+    row-gap: 14px;
 }
 
 .treemap-finding-label {
@@ -630,6 +787,11 @@ select:focus {
 
 .big-picture-finding .waffle-callout-text {
     font-weight: 400;
+}
+
+.big-picture-finding .waffle-method-note {
+    margin-top: 12px;
+    color: var(--muted);
 }
 
 .big-picture-copy > .waffle-callout {
@@ -791,7 +953,7 @@ select:focus {
 
     font-family: "DM Sans", Arial, sans-serif;
 
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.4;
 
     color: var(--muted);

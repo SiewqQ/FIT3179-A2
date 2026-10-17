@@ -486,7 +486,7 @@
             "field": "source"
           },
           "font": {
-            "value": "Arial"
+            "value": "DM Sans"
           },
           "fontSize": {
             "value": 12
@@ -523,7 +523,7 @@
             "field": "target"
           },
           "font": {
-            "value": "Arial"
+            "value": "DM Sans"
           },
           "fontSize": {
             "value": 12
@@ -554,7 +554,7 @@
             "value": "2010-11 source"
           },
           "font": {
-            "value": "Arial"
+            "value": "DM Sans"
           },
           "fontSize": {
             "value": 13
@@ -625,30 +625,6 @@
           },
           "strokeWidth": {
             "value": 1.2
-          }
-        }
-      }
-    },
-    {
-      "name": "dominantFlowAnchor",
-      "type": "symbol",
-      "interactive": false,
-      "from": {
-        "data": "dominantFlowAnnotation"
-      },
-      "encode": {
-        "update": {
-          "x": {
-            "signal": "midX"
-          },
-          "y": {
-            "signal": "scale('y', (datum.sy0 + datum.sy1 + datum.ty0 + datum.ty1) / 4)"
-          },
-          "size": {
-            "value": 18
-          },
-          "fill": {
-            "value": "#73776D"
           }
         }
       }

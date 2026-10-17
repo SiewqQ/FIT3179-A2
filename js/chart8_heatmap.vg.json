@@ -1,7 +1,10 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
-  "autosize": { "type": "fit-x", "contains": "padding" },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
   "height": 360,
   "data": {
     "url": "data/chart8_state_landuse_heatmap.csv",
@@ -79,6 +82,14 @@
     "font": "DM Sans",
     "view": {
       "stroke": null
+    },
+    "legend": {
+      "labelFont": "DM Sans",
+      "labelFontSize": 13,
+      "labelFontWeight": 400,
+      "titleFont": "DM Sans",
+      "titleFontSize": 13,
+      "titleFontWeight": 700
     }
   },
   "transform": [
@@ -107,9 +118,17 @@
             "scheme": "yellowgreen"
           },
           "legend": {
+            "title": "Agricultural land share (%)",
+            "titleLimit": 260,
             "orient": "bottom",
             "direction": "horizontal",
-            "gradientLength": 260
+            "gradientLength": 260,
+            "labelFont": "DM Sans",
+            "labelFontSize": 13,
+            "labelFontWeight": 400,
+            "titleFont": "DM Sans",
+            "titleFontSize": 13,
+            "titleFontWeight": 700
           }
         }
       }

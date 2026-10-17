@@ -1,17 +1,28 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-
   "width": "container",
-  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  },
   "height": 700,
-
   "projection": {
     "type": "conicEqualArea",
-    "parallels": [-18, -36],
-    "rotate": [-132, 0, 0],
-    "center": [0, -27]
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0,
+      0
+    ],
+    "center": [
+      0,
+      -27
+    ]
   },
-
   "layer": [
     {
       "data": {
@@ -21,7 +32,6 @@
           "feature": "STE_2021_AUST_GDA2020"
         }
       },
-
       "transform": [
         {
           "filter": "datum.properties.STE_CODE21 != 'Z'"
@@ -42,13 +52,11 @@
           }
         }
       ],
-
       "mark": {
         "type": "geoshape",
         "stroke": "white",
         "strokeWidth": 1.2
       },
-
       "encoding": {
         "color": {
           "field": "agricultural_share_pct",
@@ -56,15 +64,23 @@
           "title": "Agricultural-use land (%)",
           "scale": {
             "scheme": "yellowgreen",
-            "domain": [0, 80]
+            "domain": [
+              0,
+              80
+            ]
           },
           "legend": {
             "orient": "bottom",
             "direction": "horizontal",
-            "gradientLength": 260
+            "gradientLength": 260,
+            "labelFont": "DM Sans",
+            "labelFontSize": 13,
+            "labelFontWeight": 400,
+            "titleFont": "DM Sans",
+            "titleFontSize": 13,
+            "titleFontWeight": 700
           }
         },
-
         "tooltip": [
           {
             "field": "properties.STE_NAME21",
@@ -86,7 +102,6 @@
         ]
       }
     },
-
     {
       "data": {
         "values": [
@@ -111,13 +126,13 @@
           {
             "state": "Queensland",
             "label": "QLD",
-            "longitude": 145.0,
+            "longitude": 145,
             "latitude": -22.5
           },
           {
             "state": "New South Wales",
             "label": "NSW",
-            "longitude": 147.0,
+            "longitude": 147,
             "latitude": -32.5
           },
           {
@@ -130,11 +145,10 @@
             "state": "Tasmania",
             "label": "TAS",
             "longitude": 146.5,
-            "latitude": -42.0
+            "latitude": -42
           }
         ]
       },
-
       "mark": {
         "type": "text",
         "font": "DM Sans",
@@ -142,36 +156,34 @@
         "fontWeight": 600,
         "color": "#222222"
       },
-
       "encoding": {
         "longitude": {
           "field": "longitude",
           "type": "quantitative"
         },
-
         "latitude": {
           "field": "latitude",
           "type": "quantitative"
         },
-
         "text": {
           "field": "state"
         }
       }
     }
   ],
-
   "config": {
     "background": "white",
     "font": "DM Sans",
-
     "view": {
       "stroke": null
     },
-
     "legend": {
-      "labelFontSize": 11,
-      "titleFontSize": 12
+      "labelFontSize": 13,
+      "titleFontSize": 13,
+      "labelFont": "DM Sans",
+      "labelFontWeight": 400,
+      "titleFont": "DM Sans",
+      "titleFontWeight": 700
     }
   }
 }

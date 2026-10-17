@@ -1,7 +1,7 @@
 // Fit the complete drawing, including axes, legends and annotations, to its column.
 function embedChart(selector, source, options) {
     return vegaEmbed(selector, source, options).then(function(result) {
-        if (selector === "#treemap_chart" || selector === "#sankey_chart") {
+        if (selector === "#treemap_chart" || selector === "#treemap_detail_chart" || selector === "#sankey_chart") {
             const container = document.querySelector(selector);
             let previousWidth;
             function resizeTreemap() {
@@ -43,6 +43,86 @@ const hoverHighlightGroups = {
     "#crop_value_scatter": { fields: ["state_code"], legend: true, resetOn: ["cropChoice"] },
     "#horticulture_trend_chart": { fields: ["category"], legend: true }
 };
+
+// Reading annotations sit above the hover layers and never capture pointer events.
+function addInsightAnnotations(spec, selector) {
+    function note(name, text, x, y) {
+        spec.marks.push({
+            name: name, type: "text", interactive: false,
+            encode: { update: {
+                x: { signal: x }, y: { signal: y }, text: { value: text },
+                lineBreak: { value: "\n" }, lineHeight: { value: 18 },
+                font: { value: "DM Sans" }, fontSize: { value: 13 },
+                align: { value: "left" }, baseline: { value: "top" },
+                fill: { value: "#464C43" }
+            } }
+        });
+    }
+    function leader(name, data, x, y, x2, y2) {
+        spec.marks.push({
+            name: name, type: "rule", interactive: false, from: { data: data },
+            encode: { update: {
+                x: { signal: x }, y: { signal: y },
+                x2: { signal: x2 }, y2: { signal: y2 },
+                stroke: { value: "#687064" }, strokeWidth: { value: 1 },
+                strokeOpacity: { value: 0.8 }
+            } }
+        });
+    }
+    function anchors(name, data, x, y) {
+        spec.marks.push({
+            name: name, type: "symbol", interactive: false, from: { data: data },
+            encode: { update: {
+                x: { signal: x }, y: { signal: y }, size: { value: 180 },
+                fill: { value: "transparent" }, stroke: { value: "#464C43" },
+                strokeWidth: { value: 1.3 }
+            } }
+        });
+    }
+    const finalYearX = "scale('x', datum.year) + bandwidth('x') / 2";
+    if (selector === "#slope_chart") {
+        spec.data.push({ name: "slopeInsight", values: [
+            { year: "2020-21", index: 134.951 },
+            { year: "2020-21", index: 132.368 }
+        ] });
+        leader("slopeInsightLeaders", "slopeInsight", "width * 0.66", "height * 0.15",
+            finalYearX, "scale('y', datum.index)");
+        anchors("slopeInsightAnchors", "slopeInsight", finalYearX, "scale('y', datum.index)");
+        note("slopeInsightNote",
+            "Intensive agriculture grew fastest (+35%),\nbut cropping gained the most land:\n10.4 million hectares.",
+            "width * 0.40", "height * 0.02");
+    }
+    if (selector === "#choropleth_chart") {
+        spec.data.push({ name: "stateShareInsight", values: [
+            { longitude: 145, latitude: -21, startOffset: 0 },
+            { longitude: 149, latitude: -31, startOffset: 10 }
+        ], transform: [{ type: "geopoint", projection: spec.projections[0].name,
+            fields: ["longitude", "latitude"], as: ["x", "y"] }] });
+        spec.marks.push({
+            name: "stateShareLeaders", type: "path", interactive: false,
+            from: { data: "stateShareInsight" },
+            encode: { update: {
+                path: { signal: "'M' + (width * 0.82 + datum.startOffset) + ',' + (height * 0.145) + ' L' + datum.x + ',' + datum.y" },
+                fill: { value: null }, stroke: { value: "#687064" },
+                strokeWidth: { value: 1 }, strokeOpacity: { value: 0.8 },
+                strokeCap: { value: "round" }
+            } }
+        });
+        note("stateShareNote",
+            "Queensland and\nNew South Wales each\nclassify over three-quarters\nof their land as agricultural-use.",
+            "width * 0.78", "height * 0.02");
+    }
+    if (selector === "#crop_bump_chart") {
+        spec.data.push({ name: "chickpeaInsight", values: [{ year: "2024-25", rank: 4 }] });
+        leader("chickpeaInsightLeader", "chickpeaInsight",
+            "scale('x', '2024-25') + bandwidth('x') / 2 - 30", "scale('y', 4) - 15",
+            finalYearX, "scale('y', datum.rank)");
+        anchors("chickpeaInsightAnchor", "chickpeaInsight", finalYearX, "scale('y', datum.rank)");
+        note("chickpeaInsightNote", "Chickpeas rose from 6th to 4th.\nPlanted area more than tripled.",
+            "max(4, scale('x', '2024-25') + bandwidth('x') / 2 - 230)", "scale('y', 4) - 43");
+    }
+    return spec;
+}
 
 function embedWithHover(selector, source, options) {
     const group = hoverHighlightGroups[selector];
@@ -158,6 +238,7 @@ function embedWithHover(selector, source, options) {
             } else {
                 patchMarks(spec.marks);
             }
+            addInsightAnnotations(spec, selector);
             return spec;
         }
     })).then(function(result) {
@@ -240,6 +321,19 @@ embedChart(
         actions: true
     }
 ).catch(console.error);
+
+// Create the detail chart only when visible, so it has a measurable width.
+const treemapDetailPanel = document.getElementById("treemap-detail-panel");
+let treemapDetailStarted = false;
+treemapDetailPanel.addEventListener("toggle", function() {
+    if (!this.open || treemapDetailStarted) return;
+    treemapDetailStarted = true;
+    embedChart("#treemap_detail_chart", "js/chart2_treemap_detail.vg.json", { actions: false })
+        .catch(function(error) {
+            treemapDetailStarted = false;
+            console.error(error);
+        });
+});
 
 
 embedWithHover(
@@ -408,8 +502,12 @@ embedWithHover(
                     { activity: "Intensive agriculture" }
                 ]
             });
-            // Place the legend beside the annotation beneath the category labels.
-            spec.legends.forEach(function(legend) { legend.offset = 55; });
+            // Align the legend with the left state-label edge, beside the annotation.
+            spec.legends.forEach(function(legend) {
+                legend.orient = "none";
+                legend.legendX = -150;
+                legend.legendY = { signal: "height + 70" };
+            });
             spec.marks.push(
                 {
                     name: "heatmapAnnotationLeaders",
@@ -433,14 +531,15 @@ embedWithHover(
                     interactive: false,
                     encode: {
                         update: {
-                            x: { signal: "width * 0.65" },
+                            x: { signal: "width * 0.48" },
                             y: { signal: "height + 70" },
                             text: { value: "Intensive agriculture is present in several states,\nbut its share is so small relative to grazing and\ncropping that it rounds to 0%." },
                             lineBreak: { value: "\n" },
                             lineHeight: { value: 18 },
                             font: { value: "DM Sans" },
-                            fontSize: { value: 12 },
-                            align: { value: "center" },
+                            fontSize: { value: 13 },
+                            fontWeight: { value: 400 },
+                            align: { value: "left" },
                             baseline: { value: "top" },
                             fill: { value: "#464C43" }
                         }
@@ -495,7 +594,51 @@ embedWithHover(
     "#horticulture_trend_chart",
     "js/chart11_horticulture_trend.vg.json",
     {
-        actions: true
+        actions: true,
+        patch: function(spec) {
+            // Keep the turning point attached to its data coordinates on resize.
+            spec.data.push({
+                name: "nutTurningPoint",
+                values: [{ year: "2022-23", value: 742.7 }]
+            });
+            spec.marks.push(
+                {
+                    name: "nutRecoveryLeader", type: "rule", interactive: false,
+                    from: { data: "nutTurningPoint" },
+                    encode: { update: {
+                        x: { signal: "scale('x', datum.year) + bandwidth('x') / 2 - 35" },
+                        y: { signal: "scale('y', datum.value) - 28" },
+                        x2: { signal: "scale('x', datum.year) + bandwidth('x') / 2" },
+                        y2: { signal: "scale('y', datum.value)" },
+                        stroke: { value: "#687064" }, strokeWidth: { value: 1.2 }
+                    } }
+                },
+                {
+                    name: "nutRecoveryAnchor", type: "symbol", interactive: false,
+                    from: { data: "nutTurningPoint" },
+                    encode: { update: {
+                        x: { signal: "scale('x', datum.year) + bandwidth('x') / 2" },
+                        y: { signal: "scale('y', datum.value)" },
+                        size: { value: 140 }, fill: { value: "transparent" },
+                        stroke: { value: "#A15B13" }, strokeWidth: { value: 2 }
+                    } }
+                },
+                {
+                    name: "nutRecoveryNote", type: "text", interactive: false,
+                    from: { data: "nutTurningPoint" },
+                    encode: { update: {
+                        x: { signal: "max(4, scale('x', datum.year) + bandwidth('x') / 2 - 210)" },
+                        y: { signal: "scale('y', datum.value) - 78" },
+                        text: { value: "Nuts fell to $0.74B in 2022-23,\nthen recovered to $1.66B by 2024-25." },
+                        lineBreak: { value: "\n" }, lineHeight: { value: 18 },
+                        font: { value: "DM Sans" }, fontSize: { value: 12 },
+                        align: { value: "left" }, baseline: { value: "top" },
+                        fill: { value: "#464C43" }
+                    } }
+                }
+            );
+            return spec;
+        }
     }
 ).catch(console.error);
 

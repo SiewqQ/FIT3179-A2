@@ -1,32 +1,29 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-
   "width": "container",
-    "height": 320,
-    "autosize": {
+  "height": 320,
+  "autosize": {
     "type": "fit",
     "contains": "padding"
-    },
-
+  },
   "data": {
     "sequence": {
       "start": 1,
-      "stop": 101,
+      "stop": 201,
       "as": "cell"
     }
   },
-
   "transform": [
     {
-      "calculate": "(datum.cell - 1) % 10",
+      "calculate": "(datum.cell - 1) % 20",
       "as": "column"
     },
     {
-      "calculate": "floor((datum.cell - 1) / 10)",
+      "calculate": "floor((datum.cell - 1) / 20)",
       "as": "row"
     },
     {
-      "calculate": "datum.cell <= 55 ? 'Agricultural-use land' : 'Other land uses'",
+      "calculate": "datum.cell <= 109 ? 'Agricultural-use land' : 'Other land uses'",
       "as": "land_type"
     },
     {
@@ -34,28 +31,24 @@
       "as": "share"
     }
   ],
-
   "mark": {
     "type": "square",
     "size": 600,
     "stroke": "white",
     "strokeWidth": 1
   },
-
   "encoding": {
     "x": {
       "field": "column",
       "type": "ordinal",
       "axis": null
     },
-
     "y": {
       "field": "row",
       "type": "ordinal",
       "sort": "descending",
       "axis": null
     },
-
     "color": {
       "field": "land_type",
       "type": "nominal",
@@ -72,10 +65,15 @@
       "legend": {
         "title": null,
         "orient": "bottom",
-        "direction": "horizontal"
+        "direction": "horizontal",
+        "labelFont": "DM Sans",
+        "labelFontSize": 13,
+        "labelFontWeight": 400,
+        "titleFont": "DM Sans",
+        "titleFontSize": 13,
+        "titleFontWeight": 700
       }
     },
-
     "tooltip": [
       {
         "field": "land_type",
@@ -89,27 +87,26 @@
       }
     ]
   },
-
   "config": {
     "background": "white",
-
     "font": "DM Sans",
-
     "legend": {
-        "title": null,
-        "orient": "bottom",
-        "labelFont": "DM Sans",
-        "labelFontSize": 15,
-        "symbolSize": 220
-        },
-
-    "axis": {
-        "labelFont": "DM Sans",
-        "titleFont": "DM Sans"
+      "title": null,
+      "orient": "bottom",
+      "labelFont": "DM Sans",
+      "labelFontSize": 13,
+      "symbolSize": 220,
+      "labelFontWeight": 400,
+      "titleFont": "DM Sans",
+      "titleFontSize": 13,
+      "titleFontWeight": 700
     },
-
+    "axis": {
+      "labelFont": "DM Sans",
+      "titleFont": "DM Sans"
+    },
     "view": {
-        "stroke": null
+      "stroke": null
     }
-    }
+  }
 }

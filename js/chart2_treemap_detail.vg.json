@@ -1,0 +1,367 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Five smaller land uses, rescaled within a separate detail treemap.",
+  "width": 900,
+  "height": 340,
+  "padding": 4,
+  "autosize": "none",
+  "background": "white",
+  "data": [
+    {
+      "name": "smallLandUses",
+      "url": "data/chart2_treemap.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "area_thousand_ha": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "indexof(['irrigated_cropping', 'irrigated_hort', 'irrigated_pastures', 'intensive_ag', 'dryland_hort'], datum.id) >= 0"
+        },
+        {
+          "type": "formula",
+          "as": "detailParent",
+          "expr": "'detail'"
+        },
+        {
+          "type": "formula",
+          "as": "label",
+          "expr": "datum.id === 'intensive_ag' ? 'Intensive\\nhorticulture and\\nanimal production' : replace(datum.category, ' ', '\\n')"
+        }
+      ]
+    },
+    {
+      "name": "detailRoot",
+      "values": [
+        {
+          "id": "detail",
+          "detailParent": null
+        }
+      ]
+    },
+    {
+      "name": "detailTree",
+      "source": [
+        "detailRoot",
+        "smallLandUses"
+      ],
+      "transform": [
+        {
+          "type": "stratify",
+          "key": "id",
+          "parentKey": "detailParent"
+        },
+        {
+          "type": "treemap",
+          "field": "area_thousand_ha",
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          },
+          "method": "squarify",
+          "round": true,
+          "paddingInner": 4,
+          "size": [
+            {
+              "signal": "width - 175"
+            },
+            {
+              "signal": "height"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "detailLeaves",
+      "source": "detailTree",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "!datum.children"
+        }
+      ]
+    },
+    {
+      "name": "insideLabels",
+      "source": "detailLeaves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.id !== 'intensive_ag' && datum.id !== 'dryland_hort'"
+        }
+      ]
+    },
+    {
+      "name": "outsideLabels",
+      "source": "detailLeaves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.id === 'intensive_ag' || datum.id === 'dryland_hort'"
+        },
+        {
+          "type": "formula",
+          "as": "calloutLabel",
+          "expr": "datum.id === 'intensive_ag' ? 'Intensive horticulture\\n& animal production' : 'Dryland\\nhorticulture'"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": [
+        "grazing",
+        "cropping",
+        "horticulture",
+        "intensive"
+      ],
+      "range": [
+        "#AAB88A",
+        "#E2C66D",
+        "#C68E6B",
+        "#C28A9D"
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {
+        "data": "detailLeaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y": {
+            "field": "y0"
+          },
+          "y2": {
+            "field": "y1"
+          },
+          "fill": {
+            "scale": "color",
+            "field": "parent"
+          },
+          "stroke": {
+            "value": "white"
+          },
+          "strokeWidth": {
+            "value": 1
+          },
+          "fillOpacity": {
+            "value": 1
+          },
+          "tooltip": {
+            "signal": "{'Land use': datum.category, 'Area (ha)': format(datum.area_thousand_ha * 1000, ',.0f'), 'Share of agricultural-use land': format(datum.area_thousand_ha / 419485 * 100, '.3f') + '%'}"
+          }
+        },
+        "hover": {
+          "fillOpacity": {
+            "value": 0.82
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "insideLabels"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "(datum.x0 + datum.x1) / 2"
+          },
+          "y": {
+            "signal": "(datum.y0 + datum.y1) / 2 - 27"
+          },
+          "text": {
+            "field": "label"
+          },
+          "lineBreak": {
+            "value": "\n"
+          },
+          "lineHeight": {
+            "value": 16
+          },
+          "font": {
+            "value": "DM Sans"
+          },
+          "fontSize": {
+            "signal": "width < 600 ? 11 : 13"
+          },
+          "fontWeight": {
+            "value": 600
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "fill": {
+            "value": "#242820"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "insideLabels"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "(datum.x0 + datum.x1) / 2"
+          },
+          "y": {
+            "signal": "(datum.y0 + datum.y1) / 2 + 29"
+          },
+          "text": {
+            "signal": "format(datum.area_thousand_ha * 1000, ',.0f') + ' ha'"
+          },
+          "font": {
+            "value": "DM Sans"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "fill": {
+            "value": "#242820"
+          }
+        }
+      }
+    },
+    {
+      "name": "smallCategoryLeaders",
+      "type": "rule",
+      "interactive": false,
+      "from": {
+        "data": "outsideLabels"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "(datum.x0 + datum.x1) / 2"
+          },
+          "y": {
+            "signal": "(datum.y0 + datum.y1) / 2"
+          },
+          "x2": {
+            "signal": "width - 158"
+          },
+          "y2": {
+            "signal": "(datum.y0 + datum.y1) / 2"
+          },
+          "stroke": {
+            "value": "#687064"
+          },
+          "strokeWidth": {
+            "value": 1.2
+          }
+        }
+      }
+    },
+    {
+      "name": "smallCategoryNames",
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "outsideLabels"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "width - 148"
+          },
+          "y": {
+            "signal": "(datum.y0 + datum.y1) / 2 - 24"
+          },
+          "text": {
+            "field": "calloutLabel"
+          },
+          "lineBreak": {
+            "value": "\n"
+          },
+          "lineHeight": {
+            "value": 17
+          },
+          "font": {
+            "value": "DM Sans"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": 600
+          },
+          "align": {
+            "value": "left"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "fill": {
+            "value": "#242820"
+          }
+        }
+      }
+    },
+    {
+      "name": "smallCategoryAreas",
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "outsideLabels"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "width - 148"
+          },
+          "y": {
+            "signal": "(datum.y0 + datum.y1) / 2 + 17"
+          },
+          "text": {
+            "signal": "format(datum.area_thousand_ha * 1000, ',.0f') + ' ha'"
+          },
+          "font": {
+            "value": "DM Sans"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "align": {
+            "value": "left"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "fill": {
+            "value": "#464C43"
+          }
+        }
+      }
+    }
+  ]
+}
