@@ -1,16 +1,39 @@
 // Fit the complete drawing, including axes, legends and annotations, to its column.
 function embedChart(selector, source, options) {
-    return vegaEmbed(selector, source, options).then(function(result) {
-        if (selector === "#treemap_chart" || selector === "#treemap_detail_chart" || selector === "#sankey_chart") {
+    const previousPatch = options.patch;
+    const alignedOptions = Object.assign({}, options, {
+        renderer: "svg",
+        patch: function(spec) {
+            if (previousPatch) spec = previousPatch(spec);
+            // Section padding supplies the common margin; do not add another inset.
+            // Keep explicit bottom space for annotations and manually placed legends.
+            const padding = spec.padding;
+            spec.padding = {
+                left: 0, right: 0, top: 0,
+                bottom: padding && typeof padding === "object" ? (padding.bottom || 0) : 0
+            };
+            if (selector === "#waffle_chart") {
+                // Place the outer square edges on the sightlines, rather than
+                // centring the first and last squares in an extra half-column.
+                const x = spec.scales.find(function(scale) { return scale.name === "x"; });
+                x.type = "point";
+                x.padding = 0;
+                x.range = [Math.sqrt(600) / 2, { signal: "width - sqrt(600) / 2" }];
+            }
+            return spec;
+        }
+    });
+    return vegaEmbed(selector, source, alignedOptions).then(function(result) {
+        if (selector === "#treemap_chart" || selector === "#treemap_detail_chart" || selector === "#sankey_chart" || selector === "#sankey_detail_chart") {
             const container = document.querySelector(selector);
             let previousWidth;
             function resizeTreemap() {
                 const availableWidth = Math.floor(container.getBoundingClientRect().width);
                 if (!availableWidth || availableWidth === previousWidth) return;
                 previousWidth = availableWidth;
-                // Reserve the embed action button and the drawing's padding.
-                const minimumWidth = selector === "#sankey_chart" ? 820 : 1;
-                result.view.width(Math.max(minimumWidth, availableWidth - 48)).resize().runAsync().catch(console.error);
+                // The action menu floats above the drawing, without a width gutter.
+                const minimumWidth = selector === "#sankey_chart" || selector === "#sankey_detail_chart" ? 820 : 1;
+                result.view.width(Math.max(minimumWidth, availableWidth)).resize().runAsync().catch(console.error);
             }
             resizeTreemap();
             const resizeObserver = new ResizeObserver(resizeTreemap);
@@ -19,11 +42,25 @@ function embedChart(selector, source, options) {
         const svg = document.querySelector(selector + " svg.marks");
         if (svg) {
             function updateViewBox() {
-                svg.setAttribute("viewBox", "0 0 " + svg.getAttribute("width") + " " + svg.getAttribute("height"));
+                // Include the complete drawing, even annotations outside the plot.
+                // Vega's root bounds contain axes, labels, legends and flow notes.
+                const bounds = result.view.scenegraph().root.bounds;
+                const drawing = svg.querySelector(":scope > g");
+                const transform = drawing && drawing.transform.baseVal.consolidate();
+                if (!transform || !Number.isFinite(bounds.x1) || !Number.isFinite(bounds.x2)) return;
+                const width = bounds.x2 - bounds.x1 + 2;
+                const height = bounds.y2 - bounds.y1 + 2;
+                if (width <= 0 || height <= 0) return;
+                svg.setAttribute("viewBox", [bounds.x1 + transform.matrix.e - 1,
+                    bounds.y1 + transform.matrix.f - 1, width, height].join(" "));
+                svg.style.width = "100%";
+                svg.style.setProperty("height", (svg.parentElement.clientWidth * height / width) + "px", "important");
             }
             updateViewBox();
             const observer = new MutationObserver(updateViewBox);
             observer.observe(svg, { attributes: true, attributeFilter: ["width", "height"] });
+            const containerObserver = new ResizeObserver(updateViewBox);
+            containerObserver.observe(document.querySelector(selector));
         }
         return result;
     });
@@ -221,7 +258,7 @@ function embedWithHover(selector, source, options) {
             if (selector === "#binmap_chart" || selector === "#choropleth_chart" || selector === "#crop_symbol_map") {
                 (spec.projections || []).forEach(function(projection) {
                     delete projection.size;
-                    projection.extent = { signal: "[[24, 0], [width + 24, height]]" };
+                    projection.extent = { signal: "[[0, 0], [width, height]]" };
                 });
             }
             if (selector === "#choropleth_chart" || selector === "#binmap_chart" || selector === "#crop_symbol_map") {
@@ -311,7 +348,20 @@ embedWithHover(
     {
         actions: true
     }
-).catch(console.error);
+).then(function(result) {
+    // HTML legend keeps its font size independent of SVG scaling.
+    document.querySelectorAll(".waffle-legend [data-land-type]").forEach(function(button) {
+        const category = button.dataset.landType;
+        button.querySelector(".waffle-legend-swatch").style.backgroundColor = result.view.scale("color")(category);
+        function highlight(value) {
+            result.view.signal("hoverKey", value).runAsync().catch(console.error);
+        }
+        button.addEventListener("mouseenter", function() { highlight(category); });
+        button.addEventListener("mouseleave", function() { highlight(null); });
+        button.addEventListener("focus", function() { highlight(category); });
+        button.addEventListener("blur", function() { highlight(null); });
+    });
+}).catch(console.error);
 
 
 embedChart(
@@ -331,6 +381,18 @@ treemapDetailPanel.addEventListener("toggle", function() {
     embedChart("#treemap_detail_chart", "js/chart2_treemap_detail.vg.json", { actions: false })
         .catch(function(error) {
             treemapDetailStarted = false;
+            console.error(error);
+        });
+});
+
+const sankeyDetailPanel = document.getElementById("sankey-detail-panel");
+let sankeyDetailStarted = false;
+sankeyDetailPanel.addEventListener("toggle", function() {
+    if (!this.open || sankeyDetailStarted) return;
+    sankeyDetailStarted = true;
+    embedChart("#sankey_detail_chart", "js/chart5_sankey_detail.vg.json", { actions: true, renderer: "svg" })
+        .catch(function(error) {
+            sankeyDetailStarted = false;
             console.error(error);
         });
 });
@@ -596,6 +658,7 @@ embedWithHover(
     {
         actions: true,
         patch: function(spec) {
+            // The HTML legend below the chart keeps its text at a fixed 13px.
             // Keep the turning point attached to its data coordinates on resize.
             spec.data.push({
                 name: "nutTurningPoint",
@@ -640,5 +703,25 @@ embedWithHover(
             return spec;
         }
     }
-).catch(console.error);
+).then(function(result) {
+    const legend = document.getElementById("horticulture-legend");
+    const color = result.view.scale("color");
+    color.domain().forEach(function(category) {
+        const button = document.createElement("button");
+        button.type = "button";
+        const swatch = document.createElement("span");
+        swatch.className = "waffle-legend-swatch";
+        swatch.setAttribute("aria-hidden", "true");
+        swatch.style.backgroundColor = color(category);
+        button.append(swatch, document.createTextNode(category));
+        function highlight(value) {
+            result.view.signal("hoverKey", value).runAsync().catch(console.error);
+        }
+        button.addEventListener("mouseenter", function() { highlight(category); });
+        button.addEventListener("mouseleave", function() { highlight(null); });
+        button.addEventListener("focus", function() { highlight(category); });
+        button.addEventListener("blur", function() { highlight(null); });
+        legend.appendChild(button);
+    });
+}).catch(console.error);
 

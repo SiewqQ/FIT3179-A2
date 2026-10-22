@@ -1,17 +1,17 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "width": 990,
-  "height": 420,
+  "height": 510,
   "padding": 5,
   "autosize": "none",
   "signals": [
     {
       "name": "sourceX",
-      "update": "width * 0.16"
+      "update": "130"
     },
     {
       "name": "targetX",
-      "update": "width * 0.63"
+      "update": "width - 155"
     },
     {
       "name": "nodeWidth",
@@ -471,13 +471,13 @@
       "encode": {
         "update": {
           "x": {
-            "signal": "sourceX - nodeWidth - 10"
+            "value": 0
           },
           "y": {
             "signal": "scale('y', (datum.node_y0 + datum.node_y1) / 2)"
           },
           "align": {
-            "value": "right"
+            "value": "left"
           },
           "baseline": {
             "value": "middle"
@@ -498,7 +498,8 @@
             "value": "#333333"
           }
         }
-      }
+      },
+      "interactive": false
     },
     {
       "type": "text",
@@ -508,13 +509,13 @@
       "encode": {
         "update": {
           "x": {
-            "signal": "targetX + nodeWidth + 10"
+            "signal": "width"
           },
           "y": {
             "signal": "scale('y', (datum.node_y0 + datum.node_y1) / 2)"
           },
           "align": {
-            "value": "left"
+            "value": "right"
           },
           "baseline": {
             "value": "middle"
@@ -535,20 +536,21 @@
             "value": "#333333"
           }
         }
-      }
+      },
+      "interactive": false
     },
     {
       "type": "text",
       "encode": {
         "update": {
           "x": {
-            "signal": "sourceX"
+            "value": 0
           },
           "y": {
             "value": 15
           },
           "align": {
-            "value": "right"
+            "value": "left"
           },
           "text": {
             "value": "2010-11 source"
@@ -573,13 +575,13 @@
       "encode": {
         "update": {
           "x": {
-            "signal": "targetX"
+            "signal": "width"
           },
           "y": {
             "value": 15
           },
           "align": {
-            "value": "left"
+            "value": "right"
           },
           "text": {
             "value": "2020-21 destination"
@@ -609,16 +611,16 @@
       "encode": {
         "update": {
           "x": {
-            "signal": "width * 0.80 - 12"
+            "signal": "width - 325"
           },
           "y": {
-            "value": 180
+            "value": 440
           },
           "x2": {
-            "signal": "midX"
+            "signal": "targetX - 215"
           },
           "y2": {
-            "signal": "scale('y', (datum.sy0 + datum.sy1 + datum.ty0 + datum.ty1) / 4)"
+            "signal": "scale('y', datum.ty1) - 18"
           },
           "stroke": {
             "value": "#73776D"
@@ -636,13 +638,13 @@
       "encode": {
         "update": {
           "x": {
-            "signal": "width * 0.80"
+            "signal": "width - 150"
           },
           "y": {
-            "value": 145
+            "value": 450
           },
           "text": {
-            "value": "The flow from grazing\ninto cropping is the largest,\noccupying most of the\ndiagram and visually\novershadowing the\nsmaller shifts."
+            "value": "The flow from grazing into cropping is the largest,\noccupying most of the diagram and visually\novershadowing the smaller shifts."
           },
           "lineBreak": {
             "value": "\n"
@@ -657,7 +659,7 @@
             "value": 13
           },
           "align": {
-            "value": "left"
+            "value": "right"
           },
           "baseline": {
             "value": "top"

@@ -73,6 +73,16 @@
       ]
     },
     {
+      "name": "largeLandUseLabels",
+      "source": "leaves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.area_thousand_ha >= 40000"
+        }
+      ]
+    },
+    {
       "name": "irrigatedCropping",
       "source": "leaves",
       "transform": [
@@ -191,7 +201,7 @@
       "type": "text",
       "interactive": false,
       "from": {
-        "data": "leaves"
+        "data": "largeLandUseLabels"
       },
       "encode": {
         "update": {
@@ -238,7 +248,7 @@
       "type": "text",
       "interactive": false,
       "from": {
-        "data": "leaves"
+        "data": "largeLandUseLabels"
       },
       "encode": {
         "update": {
@@ -256,6 +266,9 @@
           },
           "text": {
             "signal": "format(datum.area_thousand_ha / 1000, ',.1f') + ' M ha'"
+          },
+          "limit": {
+            "signal": "max(0, datum.x1 - datum.x0 - 6)"
           },
           "font": {
             "value": "DM Sans"
@@ -412,7 +425,7 @@
       "encode": {
         "update": {
           "x": {
-            "signal": "width * 610 / 700"
+            "signal": "min(width * 610 / 700, width - 130)"
           },
           "y": {
             "value": 455

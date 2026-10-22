@@ -78,15 +78,23 @@ body {
 }
 
 .page-header p {
-    max-width: 720px;
+    max-width: none;
 
-    margin: 0;
+    margin: 28px -30px 0;
+    padding: 32px 30px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     text-align: left;
 
-    font-size: 18px;
-    line-height: 1.65;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
 
-    color: var(--body-text);
+    color: #22643B;
 }
 
 
@@ -132,6 +140,10 @@ body {
     color: var(--text);
 }
 
+.sankey-detail-copy {
+    margin-top: 24px;
+}
+
 .treemap-detail summary:focus-visible,
 .detail-chart-scroll:focus-visible {
     outline: 2px solid var(--accent);
@@ -149,7 +161,9 @@ body {
 .treemap-detail-copy p {
     margin: 0;
     color: var(--body-text);
-    font-size: 14px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
     line-height: 1.6;
 }
 
@@ -216,6 +230,19 @@ body {
     width: 100%;
     max-width: 100%;
     min-width: 0;
+}
+
+/* Keep charts on the same sightlines as headings and supporting text.
+   Vega's action menu floats over the top edge instead of reserving a gutter. */
+.story-section .vega-embed.has-actions {
+    padding: 0;
+}
+
+.story-section .vega-embed > details {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
 }
 
 .story-section .vega-embed .chart-wrapper {
@@ -392,7 +419,7 @@ select:focus {
    ========================================================= */
 
 .big-picture-section > .section-heading {
-    width: calc((100% - 32px) / 2);
+    width: 100%;
     max-width: none;
 }
 /* 
@@ -409,6 +436,13 @@ select:focus {
     line-height: 1.3;
     letter-spacing: 1.6px;
     color: #22643B;
+}
+
+@media (min-width: 601px) {
+    .big-picture-section .section-heading .section-number {
+        font-size: clamp(14px, 2.2vw, 24px);
+        white-space: nowrap;
+    }
 }
 
 .big-picture-section > .waffle-chart-wrapper,
@@ -675,6 +709,7 @@ select:focus {
 
 .slope-finding .change-item span {
     font-size: 14px;
+    font-weight: 400;
     line-height: 1.4;
     overflow-wrap: anywhere;
 }
@@ -912,8 +947,8 @@ select:focus {
 
     gap: 18px;
 
-    margin-top: 8px;
-    padding-top: 8px;
+    margin-top: 4px;
+    padding-top: 0;
 
 }
 
@@ -933,6 +968,55 @@ select:focus {
 }
 
 
+.waffle-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin-top: 14px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--text);
+}
+
+.waffle-legend button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.legend-title {
+    flex-basis: 100%;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--text);
+}
+
+.treemap-legend-title {
+    margin-top: 16px;
+}
+
+.waffle-legend button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.waffle-legend-swatch {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    border-radius: 2px;
+}
+
 .treemap-summary-item strong {
     display: block;
 
@@ -941,7 +1025,7 @@ select:focus {
     font-family: "DM Sans", Arial, sans-serif;
 
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 400;
     line-height: 1.35;
 
     color: var(--text);
@@ -1809,7 +1893,10 @@ select:focus {
     }
 
     .page-header p {
-        font-size: 16px;
+        margin-left: -18px;
+        margin-right: -18px;
+        padding: 24px 18px;
+        border-radius: 6px;
     }
 
     .story-section {

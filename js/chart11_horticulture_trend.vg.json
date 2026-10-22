@@ -67,18 +67,7 @@
           "#FF9DA7"
         ]
       },
-      "legend": {
-        "orient": "bottom",
-        "direction": "horizontal",
-        "columns": 5,
-        "labelLimit": 220,
-        "labelFont": "DM Sans",
-        "labelFontSize": 13,
-        "labelFontWeight": 400,
-        "titleFont": "DM Sans",
-        "titleFontSize": 13,
-        "titleFontWeight": 700
-      }
+      "legend": null
     },
     "tooltip": [
       {

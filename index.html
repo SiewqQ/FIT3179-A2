@@ -38,11 +38,6 @@
 
         <h1>Australia's Agricultural Landscape</h1>
 
-        <p>
-            Exploring how Australia's land is used for grazing,
-            cropping, horticulture and other agricultural activities.
-        </p>
-
     </header>
 
 
@@ -54,13 +49,24 @@
 
         <div class="waffle-chart-wrapper">
             <div id="waffle_chart"></div>
+            <div class="waffle-legend" role="group" aria-label="Land classification legend">
+                <div class="legend-title">Land classification</div>
+                <button type="button" data-land-type="Agricultural-use land">
+                    <span class="waffle-legend-swatch" aria-hidden="true"></span>
+                    Agricultural-use land
+                </button>
+                <button type="button" data-land-type="Other land uses">
+                    <span class="waffle-legend-swatch" aria-hidden="true"></span>
+                    Other land uses
+                </button>
+            </div>
+            <p class="chart-method-note waffle-method-note">Each square represents 0.5% of Australia's land.</p>
         </div>
 
         <div class="big-picture-copy">
             <div class="big-picture-finding">
                 <div class="waffle-big-stat">54.5%</div>
                 <p class="waffle-callout-text">of Australia's land falls within agricultural-use classes.</p>
-                <p class="chart-method-note waffle-method-note">Each square represents 0.5% of Australia's land.</p>
             </div>
             <div class="big-picture-introduction">
                 <p>
@@ -81,6 +87,7 @@
 
         <div class="treemap-left">
             <div id="treemap_chart"></div>
+                <div class="legend-title treemap-legend-title">Agricultural land use</div>
                 <div class="treemap-summary-grid">
 
                     <div class="treemap-summary-item">
@@ -246,6 +253,21 @@
         <div class="sankey-chart-wrapper">
             <div id="sankey_chart"></div>
         </div>
+
+        <details class="treemap-detail sankey-detail" id="sankey-detail-panel">
+            <summary>Explore the four smaller land-use shifts</summary>
+            <div class="detail-chart-scroll" tabindex="0" role="region" aria-label="Sankey detail of the four smaller land-use shifts" aria-describedby="sankey-detail-description">
+                <div id="sankey_detail_chart"></div>
+            </div>
+            <div class="big-picture-copy sankey-detail-copy" id="sankey-detail-description">
+                <div class="big-picture-finding">
+                    <p>This enlarged view excludes Grazing to Cropping (10.408 million ha) and Other land uses to Grazing (1.043 million ha).</p>
+                </div>
+                <div class="big-picture-introduction">
+                    <p>The smaller shifts become clearer in this enlarged view, revealing how land moved towards horticulture and intensive agriculture. Ribbon widths remain proportional to hectares, using a different scale from the overview above.</p>
+                </div>
+            </div>
+        </details>
 
         <div class="big-picture-copy">
             <div class="sankey-finding">
@@ -552,6 +574,9 @@
 
         <div class="horticulture-chart-wrapper">
             <div id="horticulture_trend_chart"></div>
+            <div class="waffle-legend" id="horticulture-legend" role="group" aria-label="Horticultural category legend">
+                <div class="legend-title">Horticultural category</div>
+            </div>
         </div>
 
         <div class="big-picture-copy">

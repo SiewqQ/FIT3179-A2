@@ -59,20 +59,10 @@
         ],
         "range": [
           "#477DA5",
-          "#E5E2DC"
+          "#5B3F80"
         ]
       },
-      "legend": {
-        "title": null,
-        "orient": "bottom",
-        "direction": "horizontal",
-        "labelFont": "DM Sans",
-        "labelFontSize": 13,
-        "labelFontWeight": 400,
-        "titleFont": "DM Sans",
-        "titleFontSize": 13,
-        "titleFontWeight": 700
-      }
+      "legend": null
     },
     "tooltip": [
       {
