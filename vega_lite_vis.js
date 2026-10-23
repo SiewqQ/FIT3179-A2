@@ -122,10 +122,13 @@ function addInsightAnnotations(spec, selector) {
             { year: "2020-21", index: 134.951 },
             { year: "2020-21", index: 132.368 }
         ] });
+        // drawing connecting lines for line annotation in slope chart 
         leader("slopeInsightLeaders", "slopeInsight", "width * 0.66", "height * 0.15",
             finalYearX, "scale('y', datum.index)");
-        anchors("slopeInsightAnchors", "slopeInsight", finalYearX, "scale('y', datum.index)");
-        note("slopeInsightNote",
+        // drawing circle points for line annotation in slope chart
+            anchors("slopeInsightAnchors", "slopeInsight", finalYearX, "scale('y', datum.index)");
+        // adding text annotation for slope chart
+            note("slopeInsightNote",
             "Intensive agriculture grew fastest (+35%),\nbut cropping gained the most land:\n10.4 million hectares.",
             "width * 0.40", "height * 0.02");
     }
@@ -136,6 +139,7 @@ function addInsightAnnotations(spec, selector) {
         ], transform: [{ type: "geopoint", projection: spec.projections[0].name,
             fields: ["longitude", "latitude"], as: ["x", "y"] }] });
         spec.marks.push({
+            // line annotation for choropleth map
             name: "stateShareLeaders", type: "path", interactive: false,
             from: { data: "stateShareInsight" },
             encode: { update: {
@@ -345,9 +349,7 @@ function embedWithHover(selector, source, options) {
 embedWithHover(
     "#waffle_chart",
     "js/chart1_waffle.vg.json",
-    {
-        actions: true
-    }
+    { actions: true }
 ).then(function(result) {
     // HTML legend keeps its font size independent of SVG scaling.
     document.querySelectorAll(".waffle-legend [data-land-type]").forEach(function(button) {
