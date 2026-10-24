@@ -24,7 +24,7 @@ function embedChart(selector, source, options) {
         }
     });
     return vegaEmbed(selector, source, alignedOptions).then(function(result) {
-        if (selector === "#treemap_chart" || selector === "#treemap_detail_chart" || selector === "#sankey_chart" || selector === "#sankey_detail_chart") {
+        if (selector === "#treemap_chart" || selector === "#treemap_detail_chart" || selector === "#sankey_chart" || selector === "#sankey_detail_chart" || selector === "#cell_landuse_chart") {
             const container = document.querySelector(selector);
             let previousWidth;
             function resizeTreemap() {
@@ -40,7 +40,9 @@ function embedChart(selector, source, options) {
             resizeObserver.observe(container);
         }
         const svg = document.querySelector(selector + " svg.marks");
-        if (svg) {
+        // Resize the cell bars through Vega above, keeping its 12px labels and
+        // 48px rows at their native size instead of magnifying the whole SVG.
+        if (svg && selector !== "#cell_landuse_chart") {
             function updateViewBox() {
                 // Include the complete drawing, even annotations outside the plot.
                 // Vega's root bounds contain axes, labels, legends and flow notes.
@@ -439,8 +441,8 @@ embedChart(
         stat.textContent =
             "10.4 M ha";
 
-        text.textContent =
-            "was the net shift from grazing-related land uses towards cropping between 2010-11 and 2020-21.";
+        text.innerHTML =
+            "was the net shift from <strong>grazing-related land uses</strong> towards <strong>cropping</strong> between 2010-11 and 2020-21.";
     }
 
 

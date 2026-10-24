@@ -642,6 +642,12 @@ select:focus {
     margin-top: 0;
 }
 
+@media (min-width: 601px) {
+    .binmap-section .big-picture-introduction {
+        margin-top: 32px;
+    }
+}
+
 .binmap-section .binmap-cell-note {
     margin-top: 18px;
     font-family: "DM Sans", Arial, sans-serif;
